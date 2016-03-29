@@ -1,12 +1,12 @@
-package com.uny.crysdip.ui.ui.adapter;
+package com.uny.crysdip.ui.adapter;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-import com.uny.crysdip.ui.ui.fragment.FavoritFragment;
-import com.uny.crysdip.ui.ui.fragment.ListIndustriFragment;
-import com.uny.crysdip.ui.ui.fragment.RecomendationFragment;
+import com.uny.crysdip.ui.fragment.FavoritFragment;
+import com.uny.crysdip.ui.fragment.ListIndustriFragment;
+import com.uny.crysdip.ui.fragment.RecomendationFragment;
 
 /**
  * Created by root on 21/03/16.

@@ -1,20 +1,12 @@
-package com.uny.crysdip.ui.ui.activity;
+package com.uny.crysdip.ui.activity;
 
 import android.content.Intent;
-import android.graphics.Color;
-import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
 
-import com.github.paolorotolo.appintro.AppIntro;
 import com.github.paolorotolo.appintro.AppIntro2;
-import com.github.paolorotolo.appintro.AppIntroFragment;
-import com.uny.crysdip.R;
-import com.uny.crysdip.ui.ui.fragment.Intro1stFragment;
-import com.uny.crysdip.ui.ui.fragment.Intro2ndFragment;
-import com.uny.crysdip.ui.ui.fragment.Intro3rdFragment;
+import com.uny.crysdip.ui.fragment.Intro1stFragment;
+import com.uny.crysdip.ui.fragment.Intro2ndFragment;
+import com.uny.crysdip.ui.fragment.Intro3rdFragment;
 
 //use appintro paolorotolo library
 

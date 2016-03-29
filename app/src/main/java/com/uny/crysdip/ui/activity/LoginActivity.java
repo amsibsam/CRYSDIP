@@ -1,4 +1,4 @@
-package com.uny.crysdip.ui.ui.activity;
+package com.uny.crysdip.ui.activity;
 
 import android.databinding.DataBindingUtil;
 import android.support.v7.app.AppCompatActivity;

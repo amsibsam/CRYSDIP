@@ -1,4 +1,4 @@
-package com.uny.crysdip.ui.ui.fragment;
+package com.uny.crysdip.ui.fragment;
 
 
 import android.os.Bundle;
@@ -12,10 +12,10 @@ import com.uny.crysdip.R;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ListIndustriFragment extends android.support.v4.app.Fragment {
+public class Intro3rdFragment extends Fragment {
 
 
-    public ListIndustriFragment() {
+    public Intro3rdFragment() {
         // Required empty public constructor
     }
 
@@ -24,7 +24,7 @@ public class ListIndustriFragment extends android.support.v4.app.Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_list_industri, container, false);
+        return inflater.inflate(R.layout.fragment_intro3rd, container, false);
     }
 
 }

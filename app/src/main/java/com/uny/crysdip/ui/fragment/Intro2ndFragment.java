@@ -1,4 +1,4 @@
-package com.uny.crysdip.ui.ui.fragment;
+package com.uny.crysdip.ui.fragment;
 
 
 import android.os.Bundle;

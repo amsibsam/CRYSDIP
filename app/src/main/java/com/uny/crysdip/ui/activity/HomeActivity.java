@@ -1,4 +1,4 @@
-package com.uny.crysdip.ui.ui.activity;
+package com.uny.crysdip.ui.activity;
 
 import android.databinding.DataBindingUtil;
 import android.support.design.widget.TabLayout;
@@ -6,12 +6,10 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.ViewParent;
 
 import com.uny.crysdip.R;
 import com.uny.crysdip.databinding.ActivityHomeBinding;
-import com.uny.crysdip.ui.ui.adapter.TabAdapter;
-import com.uny.crysdip.ui.ui.fragment.ListIndustriFragment;
+import com.uny.crysdip.ui.adapter.TabAdapter;
 
 public class HomeActivity extends AppCompatActivity {
     private ActivityHomeBinding binding;
@@ -27,10 +25,9 @@ public class HomeActivity extends AppCompatActivity {
         viewPager = binding.pager;
 
         setSupportActionBar(binding.toolbar);
-        //TODO: use proper image icon
-        tabLayout.addTab(tabLayout.newTab().setText("List PI"));
-        tabLayout.addTab(tabLayout.newTab().setText("Recomendation"));
-        tabLayout.addTab(tabLayout.newTab().setText("Favorite"));
+        tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.ic_tab_home));
+        tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.ic_tab_recomendation));
+        tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.ic_tab_favorite));
 
         final PagerAdapter adapter = new TabAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
