@@ -24,7 +24,7 @@ public class TabAdapter extends FragmentStatePagerAdapter {
 
         switch (position) {
             case 0:
-                ListIndustriFragment tab1 = new ListIndustriFragment();
+                ListIndustriFragment tab1 = ListIndustriFragment.newInstance(1, "ListIndustri");
                 return tab1;
             case 1:
                 RecomendationFragment tab2 = new RecomendationFragment();

@@ -1,8 +1,10 @@
 package com.uny.crysdip.ui.activity;
 
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
@@ -36,5 +38,12 @@ public class LoginActivity extends AppCompatActivity {
 
         LayoutAnimationController controller =
                 new LayoutAnimationController(set, 0.25f);
+
+        binding.btnLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+            }
+        });
     }
 }

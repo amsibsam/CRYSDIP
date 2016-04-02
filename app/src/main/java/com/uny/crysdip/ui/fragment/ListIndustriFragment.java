@@ -15,8 +15,13 @@ import com.uny.crysdip.R;
 public class ListIndustriFragment extends android.support.v4.app.Fragment {
 
 
-    public ListIndustriFragment() {
-        // Required empty public constructor
+    public static ListIndustriFragment newInstance(int page, String title) {
+        ListIndustriFragment listIndustriFragment = new ListIndustriFragment();
+        Bundle args = new Bundle();
+        args.putInt("someInt", page);
+        args.putString("someTitle", title);
+        listIndustriFragment.setArguments(args);
+        return listIndustriFragment;
     }
 
 
