@@ -25,9 +25,9 @@ public class HomeActivity extends AppCompatActivity {
         viewPager = binding.pager;
 
         setSupportActionBar(binding.toolbar);
-        tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.ic_tab_home));
-        tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.ic_tab_recomendation));
-        tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.ic_tab_favorite));
+        tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.ic_tab_home), 0);
+        tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.ic_tab_recomendation), 1);
+        tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.ic_tab_favorite), 2);
 
         final PagerAdapter adapter = new TabAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
@@ -38,7 +38,16 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 viewPager.setCurrentItem(tab.getPosition());
-
+                switch (tab.getPosition()){
+                    case 0:
+                        binding.toolbarTitle.setText("Beranda");
+                        break;
+                    case 1:
+                        binding.toolbarTitle.setText("Rekomendasi");
+                        break;
+                    case 2:
+                        binding.toolbarTitle.setText("Favorit");
+                }
             }
 
             @Override

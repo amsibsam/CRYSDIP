@@ -26,8 +26,10 @@
                 app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
                 <fragment
+                    android:id="@+id/map_fragment"
                     android:layout_width="match_parent"
-                    android:layout_height="230dp"/>
+                    android:layout_height="230dp"
+                    class="com.google.android.gms.maps.SupportMapFragment"/>
 
 
                 <android.support.v7.widget.Toolbar
