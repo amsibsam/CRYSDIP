@@ -33,7 +33,7 @@ public class ListIndustriFragment extends android.support.v4.app.Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentListIndustriBinding.inflate(inflater, container, false);
-        binding.industriContainer.setOnClickListener(new View.OnClickListener() {
+        binding.tvIndustriName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getActivity(), IndustryActivity.class));
