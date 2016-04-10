@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
-    tools:context="com.uny.crysdip.ui.activity.LoginActivity">
+    tools:context=".ui.activity.LoginActivity">
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         android:background="@android:color/transparent"
@@ -33,7 +33,7 @@
         android:layout_centerHorizontal="true"
         android:layout_width="180dp"
         android:layout_height="180dp"
-        android:src="@mipmap/ic_launcher"/>
+        android:src="@drawable/ic_uny"/>
     <LinearLayout
         android:id="@+id/et_container"
         android:layout_below="@+id/image_icon"
