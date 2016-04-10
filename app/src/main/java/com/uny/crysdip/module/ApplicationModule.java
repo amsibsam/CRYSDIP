@@ -1,4 +1,4 @@
-package com.uny.crysdip.application.module;
+package com.uny.crysdip.module;
 
 import android.app.Application;
 import android.content.Context;

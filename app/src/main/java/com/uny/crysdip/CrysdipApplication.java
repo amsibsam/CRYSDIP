@@ -1,11 +1,9 @@
-package com.uny.crysdip.application;
+package com.uny.crysdip;
 
 import android.app.Application;
 
-import com.uny.crysdip.application.module.CrysdipComponent;
-
 /**
- * Created by root on 29/03/16.
+ * Created by root on 09/04/16.
  */
 public class CrysdipApplication extends Application {
     private static CrysdipApplication instance;
@@ -17,13 +15,15 @@ public class CrysdipApplication extends Application {
 
         instance = this;
         component = CrysdipComponent.Initializer.init(this);
+
+
     }
 
-    public static CrysdipApplication getInstance(){
+    public static CrysdipApplication getInstance() {
         return instance;
     }
 
-    public static CrysdipComponent getComponent(){
+    public static CrysdipComponent getComponent() {
         return instance.component;
     }
 }

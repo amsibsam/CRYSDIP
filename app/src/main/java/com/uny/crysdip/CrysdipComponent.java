@@ -1,6 +1,11 @@
-package com.uny.crysdip.application.module;
+package com.uny.crysdip;
 
 import android.app.Application;
+
+import com.uny.crysdip.module.ApplicationModule;
+import com.uny.crysdip.module.ExternalModule;
+import com.uny.crysdip.module.InternalModule;
+import com.uny.crysdip.ui.activity.LoginActivity;
 
 import javax.inject.Singleton;
 
@@ -13,8 +18,11 @@ import dagger.Component;
 @Component(modules = {
         ApplicationModule.class,
         ExternalModule.class,
+        InternalModule.class
 })
 public interface CrysdipComponent {
+
+    void inject(LoginActivity loginActivity);
 
     final class Initializer {
         public static CrysdipComponent init(Application application) {
