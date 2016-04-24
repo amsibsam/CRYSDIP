@@ -11,6 +11,7 @@ import com.google.gson.JsonElement;
 import com.squareup.okhttp.HttpUrl;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.logging.HttpLoggingInterceptor;
+import com.uny.crysdip.Pojo.IndustriDetail;
 import com.uny.crysdip.Pojo.ListIndustri;
 
 import java.io.IOException;
@@ -23,6 +24,7 @@ import retrofit.HttpException;
 import retrofit.Retrofit;
 import retrofit.RxJavaCallAdapterFactory;
 import retrofit.http.GET;
+import retrofit.http.Query;
 import rx.Observable;
 import rx.functions.Func1;
 
@@ -33,6 +35,9 @@ public class CrysdipService {
     private interface CrysdipApi {
         @GET("industri/list")
         Observable<ListIndustriResponse> getListIndustri();
+
+        @GET("industri/detail")
+        Observable<IndustriDetailResponse> getIndustriDetail(@Query("id") int id);
     }
 
     private CrysdipApi crysdipApi;
@@ -46,7 +51,7 @@ public class CrysdipService {
         BaseUrl baseUrl = new BaseUrl() {
             @Override
             public HttpUrl url() {
-                final String baseUrl = "http://crysdip.herokuapp.com/";
+                final String baseUrl = "http://crysdip.herokuapp.com/api/";
                 return HttpUrl.parse(baseUrl);
             }
         };
@@ -93,6 +98,16 @@ public class CrysdipService {
                     @Override
                     public ListIndustri call(ListIndustriResponse.Industri industri) {
                         return industri.toIndustriPojo();
+                    }
+                });
+    }
+
+    public Observable<IndustriDetail> getIndustriDetail(int id){
+        return crysdipApi.getIndustriDetail(id)
+                .map(new Func1<IndustriDetailResponse, IndustriDetail>() {
+                    @Override
+                    public IndustriDetail call(IndustriDetailResponse industriDetailResponse) {
+                        return industriDetailResponse.industri.toIndustriDetailPojo();
                     }
                 });
     }
@@ -150,18 +165,69 @@ public class CrysdipService {
         }
     }
 
-    private static class ListIndustriResponse{
+
+    /*
+    Sample Response
+    {
+      "status": "success",
+      "industris": [
+        {
+          "id": 3,
+          "nama_industri": "Qiscus",
+          "alamat": "Jalan Petung"
+        }
+      ]
+    }
+    */
+    private class ListIndustriResponse{
         String status;
         List<Industri> industris;
 
         class Industri{
+            int id;
             String namaIndustri;
             String alamat;
 
             ListIndustri toIndustriPojo(){
-                return new ListIndustri(namaIndustri, alamat);
+                return new ListIndustri(id, namaIndustri, alamat);
             }
         }
+    }
+
+    /*
+    Sample Response
+    {
+      "status": "success",
+      "industri": {
+        "nama_industri": "Qiscus",
+        "deskripsi": "Qiscus merupakan industri yang bergerak dalam aplikasi realtime chatting",
+        "alamat": "Jalan Petung",
+        "lat": "123",
+        "lng": "321",
+        "jumlah_karyawan": 123,
+        "foto": "zeus.jpg",
+        "foto_url": "https://crysdip.s3-ap-southeast-1.amazonaws.com/1461454525.jpg"
+      }
+    }
+    */
+    private class IndustriDetailResponse{
+        Industri industri;
+
+        class Industri{
+            String namaIndustri;
+            String deskripsi;
+            String alamat;
+            String lat;
+            String lng;
+            int jumlahKaryawan;
+            String fotoUrl;
+
+            IndustriDetail toIndustriDetailPojo(){
+                return new IndustriDetail(namaIndustri, deskripsi, alamat, Double.parseDouble(lat), Double.parseDouble(lng), jumlahKaryawan, fotoUrl);
+            }
+        }
+
+
     }
 
 

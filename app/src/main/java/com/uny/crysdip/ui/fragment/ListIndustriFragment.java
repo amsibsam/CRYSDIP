@@ -36,6 +36,7 @@ import rx.schedulers.Schedulers;
 public class ListIndustriFragment extends android.support.v4.app.Fragment {
     private FragmentListIndustriBinding binding;
     private IndustriListViewModel industriListViewModel = new IndustriListViewModel();
+    private static final String INDUSTRI_ID = "industri_id";
 
     @Inject
     CrysdipService crysdipService;
@@ -92,13 +93,16 @@ public class ListIndustriFragment extends android.support.v4.app.Fragment {
 
                     @Override
                     public void onNext(List<ListIndustri> industris) {
+                        binding.pbLoading.setVisibility(View.GONE);
+                        binding.listView.setVisibility(View.VISIBLE);
                         Log.d("amsibsam", "Jumlah "+industris.size());
-                        for (ListIndustri listindustri : industris){
+                        for (final ListIndustri listindustri : industris){
                             industriListViewModel.items.add(new IndustriViewModel(listindustri,
                                     new View.OnClickListener() {
                                         @Override
                                         public void onClick(View v) {
-                                            startActivity(new Intent(getActivity(), IndustryActivity.class));
+                                            startActivity(new Intent(getActivity(), IndustryActivity.class)
+                                            .putExtra(INDUSTRI_ID, listindustri.getId()));
                                         }
                                     }));
                         }

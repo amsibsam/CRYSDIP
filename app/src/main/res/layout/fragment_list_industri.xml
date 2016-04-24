@@ -12,9 +12,12 @@
     android:layout_height="match_parent"
     tools:context=".ui.fragment.ListIndustriFragment">
     <ProgressBar
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_centerInParent="true"/>
+        android:id="@+id/pb_loading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:progressDrawable="@drawable/progress_bar_color"
+        style="?android:attr/progressBarStyleLarge"/>
     <ListView
         android:visibility="gone"
         android:id="@+id/list_view"
