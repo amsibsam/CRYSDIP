@@ -5,7 +5,9 @@ import android.app.Application;
 import com.uny.crysdip.module.ApplicationModule;
 import com.uny.crysdip.module.ExternalModule;
 import com.uny.crysdip.module.InternalModule;
+import com.uny.crysdip.ui.activity.HomeActivity;
 import com.uny.crysdip.ui.activity.LoginActivity;
+import com.uny.crysdip.ui.fragment.ListIndustriFragment;
 
 import javax.inject.Singleton;
 
@@ -23,6 +25,8 @@ import dagger.Component;
 public interface CrysdipComponent {
 
     void inject(LoginActivity loginActivity);
+    void inject(HomeActivity homeActivity);
+    void inject(ListIndustriFragment listIndustriFragment);
 
     final class Initializer {
         public static CrysdipComponent init(Application application) {

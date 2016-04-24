@@ -2,20 +2,18 @@ package com.uny.crysdip.network;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.squareup.okhttp.HttpUrl;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.logging.HttpLoggingInterceptor;
+import com.uny.crysdip.Pojo.ListIndustri;
 
 import java.io.IOException;
-import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -24,6 +22,7 @@ import retrofit.GsonConverterFactory;
 import retrofit.HttpException;
 import retrofit.Retrofit;
 import retrofit.RxJavaCallAdapterFactory;
+import retrofit.http.GET;
 import rx.Observable;
 import rx.functions.Func1;
 
@@ -32,7 +31,8 @@ import rx.functions.Func1;
  */
 public class CrysdipService {
     private interface CrysdipApi {
-
+        @GET("industri/list")
+        Observable<ListIndustriResponse> getListIndustri();
     }
 
     private CrysdipApi crysdipApi;
@@ -46,7 +46,7 @@ public class CrysdipService {
         BaseUrl baseUrl = new BaseUrl() {
             @Override
             public HttpUrl url() {
-                final String baseUrl = "http://192.168.1.100:8000/";
+                final String baseUrl = "http://crysdip.herokuapp.com/";
                 return HttpUrl.parse(baseUrl);
             }
         };
@@ -79,6 +79,22 @@ public class CrysdipService {
         crysdipApi = retrofit.create(CrysdipApi.class);
 
 
+    }
+
+    public Observable<ListIndustri> getListIndustri(){
+        return crysdipApi.getListIndustri()
+                .flatMap(new Func1<ListIndustriResponse, Observable<ListIndustriResponse.Industri>>() {
+                    @Override
+                    public Observable<ListIndustriResponse.Industri> call(ListIndustriResponse listIndustriResponse) {
+                        return Observable.from(listIndustriResponse.industris);
+                    }
+                })
+                .map(new Func1<ListIndustriResponse.Industri, ListIndustri>() {
+                    @Override
+                    public ListIndustri call(ListIndustriResponse.Industri industri) {
+                        return industri.toIndustriPojo();
+                    }
+                });
     }
 
 //    public Observable<Speciality> getSpeciality() {
@@ -131,6 +147,20 @@ public class CrysdipService {
 
         T parse(Gson gson, Class<T> clz) {
             return gson.fromJson(data, clz);
+        }
+    }
+
+    private static class ListIndustriResponse{
+        String status;
+        List<Industri> industris;
+
+        class Industri{
+            String namaIndustri;
+            String alamat;
+
+            ListIndustri toIndustriPojo(){
+                return new ListIndustri(namaIndustri, alamat);
+            }
         }
     }
 

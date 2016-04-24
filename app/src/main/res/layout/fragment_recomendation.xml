@@ -13,9 +13,132 @@
             android:layout_above="@+id/btn_rekomendasi">
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
                 android:orientation="vertical">
-
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/btn_text_normal"
+                    android:text="Kota/Kabupaten"
+                    android:textColor="@android:color/darker_gray"/>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_marginTop="6dp"
+                    android:background="@android:color/darker_gray"/>
+                <Spinner
+                    android:id="@+id/spinner_tempat"
+                    android:layout_width="wrap_content"
+                    android:layout_marginLeft="6dp"
+                    android:layout_height="match_parent"/>
+                <TextView
+                    android:layout_marginTop="8dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/btn_text_normal"
+                    android:text="Kategori Industri"
+                    android:textColor="@android:color/darker_gray"/>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_marginTop="6dp"
+                    android:background="@android:color/darker_gray"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="6dp"
+                    android:orientation="vertical">
+                    <CheckBox
+                        android:id="@+id/cb_jaringan"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Jaringan"/>
+                    <CheckBox
+                        android:id="@+id/cb_multimedia"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="multimedia"/>
+                    <CheckBox
+                        android:id="@+id/cb_pemrograman"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Pemrograman"/>
+                </LinearLayout>
+                <TextView
+                    android:layout_marginTop="8dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/btn_text_normal"
+                    android:text="Minat dan Keahlian"
+                    android:textColor="@android:color/darker_gray"/>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_marginTop="6dp"
+                    android:background="@android:color/darker_gray"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingLeft="6dp">
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                        <CheckBox
+                            android:id="@+id/cb_instalasi_jaringan"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Instalasi Jaringan"/>
+                        <CheckBox
+                            android:id="@+id/cb_administrasi_jaringan"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Administrasi Jaringan"/>
+                        <CheckBox
+                            android:id="@+id/cb_android"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Android "/>
+                        <CheckBox
+                            android:id="@+id/cb_windows_phone"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Windows Phone"/>
+                        <CheckBox
+                            android:id="@+id/cb_backend"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Backend"/>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="6dp"
+                        android:orientation="vertical">
+                        <CheckBox
+                            android:id="@+id/cb_administrasi_server"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Administrasi Server"/>
+                        <CheckBox
+                            android:id="@+id/cb_desainer"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="UI/UX desainer"/>
+                        <CheckBox
+                            android:id="@+id/cb_ios"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="IOS"/>
+                        <CheckBox
+                            android:id="@+id/cb_frontend"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Frontend Web"/>
+                    </LinearLayout>
+                </LinearLayout>
             </LinearLayout>
 
         </ScrollView>

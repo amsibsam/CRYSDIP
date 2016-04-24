@@ -1,4 +1,4 @@
-package com.uny.crysdip.pojo;
+package com.uny.crysdip.Pojo;
 
 /**
  * Created by root on 03/04/16.

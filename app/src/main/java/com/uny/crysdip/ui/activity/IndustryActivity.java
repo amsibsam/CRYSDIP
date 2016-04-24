@@ -38,8 +38,8 @@ public class IndustryActivity extends FragmentActivity implements OnMapReadyCall
         map = googleMap;
 
         // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        map.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        map.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        LatLng sydney = new LatLng(-7.7791783, 110.3957245);
+        map.addMarker(new MarkerOptions().position(sydney).title("Qiscus"));
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 12f));
     }
 }
