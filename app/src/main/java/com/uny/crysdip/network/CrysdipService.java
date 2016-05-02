@@ -14,8 +14,12 @@ import com.squareup.okhttp.logging.HttpLoggingInterceptor;
 import com.uny.crysdip.pojo.IndustriDetail;
 import com.uny.crysdip.pojo.ListIndustri;
 import com.uny.crysdip.pojo.Mahasiswa;
+import com.uny.crysdip.pojo.Testimoni;
+
+import junit.framework.Test;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -41,8 +45,11 @@ public class CrysdipService {
         Observable<ListIndustriResponse> getListIndustri();
 
         @GET("industri/detail")
-        Observable<IndustriDetailResponse> getIndustriDetail(@Query("industri_id") int industri_id,
-                                                             @Query("mahasiswa_id") int mahasiswa_id);
+        Observable<IndustriDetailResponse> getIndustriDetail(@Query("industri_id") int industriId,
+                                                             @Query("mahasiswa_id") int mahasiswaId);
+
+        @GET("industri/testimoni-list")
+        Observable<TestimoniListResponse> getTestimoni(@Query("industri_id") int industriId);
 
         @FormUrlEncoded
         @POST("mahasiswa/login")
@@ -58,6 +65,12 @@ public class CrysdipService {
         @POST("industri/unlike")
         Observable<FavoriteResponse> setUnfavorite(@Field("industri_id") int industriId,
                                                  @Field("mahasiswa_id") int mahasiswaId);
+
+        @FormUrlEncoded
+        @POST("industri/testimoni-post")
+        Observable<TestimoniResponse> postTestimoni(@Field("testimoni") String testimoni,
+                                                    @Field("mahasiswa_id") int mahasiswaId,
+                                                    @Field("industri_id") int industriId);
     }
 
     private CrysdipApi crysdipApi;
@@ -134,6 +147,18 @@ public class CrysdipService {
                 });
     }
 
+    public Observable<String> postTestimoni(final String testimoni, int mahasiswaId, int industriId){
+        return crysdipApi.postTestimoni(testimoni, mahasiswaId, industriId)
+                .map(new Func1<TestimoniResponse, String>() {
+                    @Override
+                    public String call(TestimoniResponse testimoniResponse) {
+                        return testimoniResponse.message;
+                    }
+                });
+    }
+
+
+
     public Observable<ListIndustri> getListIndustri(){
         return crysdipApi.getListIndustri()
                 .flatMap(new Func1<ListIndustriResponse, Observable<ListIndustriResponse.Industri>>() {
@@ -156,6 +181,22 @@ public class CrysdipService {
                     @Override
                     public IndustriDetail call(IndustriDetailResponse industriDetailResponse) {
                         return industriDetailResponse.industri.toIndustriDetailPojo(industriDetailResponse.liked);
+                    }
+                });
+    }
+
+    public Observable<Testimoni> getTestimoni(int industriId){
+        return crysdipApi.getTestimoni(industriId)
+                .flatMap(new Func1<TestimoniListResponse, Observable<TestimoniListResponse.Testimoni>>() {
+                    @Override
+                    public Observable<TestimoniListResponse.Testimoni> call(TestimoniListResponse testimoniListResponse) {
+                        return Observable.from(testimoniListResponse.testimoni);
+                    }
+                })
+                .map(new Func1<TestimoniListResponse.Testimoni, Testimoni>() {
+                    @Override
+                    public Testimoni call(TestimoniListResponse.Testimoni testimoni) {
+                        return testimoni.toTestimoniPojo();
                     }
                 });
     }
@@ -296,6 +337,30 @@ public class CrysdipService {
 
     private static class FavoriteResponse{
         String status;
+    }
+
+    private static class TestimoniResponse{
+        String status;
+        String message;
+    }
+
+    private static class TestimoniListResponse{
+        String status;
+        List<Testimoni> testimoni;
+
+        class Testimoni{
+            Date createdAt;
+            String namaMahasiswa;
+            String nim;
+            String testimoni;
+
+            com.uny.crysdip.pojo.Testimoni toTestimoniPojo(){
+                return new com.uny.crysdip.pojo.Testimoni(createdAt, namaMahasiswa, nim, testimoni);
+            }
+        }
+
+
+
     }
 
 
