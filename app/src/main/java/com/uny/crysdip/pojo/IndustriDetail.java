@@ -1,4 +1,4 @@
-package com.uny.crysdip.Pojo;
+package com.uny.crysdip.pojo;
 
 /**
  * Created by rahardyan on 24/04/16.
@@ -11,8 +11,9 @@ public class IndustriDetail {
     private final double lng;
     private final int jumlahKaryawan;
     private final String fotoUrl;
+    private final boolean isFavorite;
 
-    public IndustriDetail(String namaIndustri, String deskripsi, String alamat, double lat, double lng, int jumlahKaryawan, String fotoUrl) {
+    public IndustriDetail(String namaIndustri, String deskripsi, String alamat, double lat, double lng, int jumlahKaryawan, String fotoUrl, boolean isFavorite) {
         this.namaIndustri = namaIndustri;
         Deskripsi = deskripsi;
         this.alamat = alamat;
@@ -20,6 +21,7 @@ public class IndustriDetail {
         this.lng = lng;
         this.jumlahKaryawan = jumlahKaryawan;
         this.fotoUrl = fotoUrl;
+        this.isFavorite = isFavorite;
     }
 
     public String getNamaIndustri() {
@@ -48,5 +50,9 @@ public class IndustriDetail {
 
     public String getFotoUrl() {
         return fotoUrl;
+    }
+
+    public boolean isFavorite() {
+        return isFavorite;
     }
 }

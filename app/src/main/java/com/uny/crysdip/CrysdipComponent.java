@@ -7,7 +7,9 @@ import com.uny.crysdip.module.ExternalModule;
 import com.uny.crysdip.module.InternalModule;
 import com.uny.crysdip.ui.activity.HomeActivity;
 import com.uny.crysdip.ui.activity.IndustryActivity;
+import com.uny.crysdip.ui.activity.IntroActivity;
 import com.uny.crysdip.ui.activity.LoginActivity;
+import com.uny.crysdip.ui.fragment.Intro1stFragment;
 import com.uny.crysdip.ui.fragment.ListIndustriFragment;
 
 import javax.inject.Singleton;
@@ -29,6 +31,8 @@ public interface CrysdipComponent {
     void inject(HomeActivity homeActivity);
     void inject(ListIndustriFragment listIndustriFragment);
     void inject(IndustryActivity industryActivity);
+    void inject(IntroActivity introActivity);
+    void inject(Intro1stFragment intro1stFragment);
 
     final class Initializer {
         public static CrysdipComponent init(Application application) {

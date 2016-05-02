@@ -14,7 +14,7 @@ import android.view.ViewGroup;
 
 import com.uny.crysdip.BR;
 import com.uny.crysdip.CrysdipApplication;
-import com.uny.crysdip.Pojo.ListIndustri;
+import com.uny.crysdip.pojo.ListIndustri;
 import com.uny.crysdip.R;
 import com.uny.crysdip.databinding.FragmentListIndustriBinding;
 import com.uny.crysdip.network.CrysdipService;

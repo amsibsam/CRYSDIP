@@ -1,8 +1,7 @@
 package com.uny.crysdip.ui.activity;
 
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
-import android.databinding.ObservableArrayList;
-import android.databinding.ObservableList;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -10,38 +9,31 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.uny.crysdip.BR;
 import com.uny.crysdip.CrysdipApplication;
-import com.uny.crysdip.Pojo.ListIndustri;
 import com.uny.crysdip.R;
+import com.uny.crysdip.cache.CacheAccountStore;
 import com.uny.crysdip.databinding.ActivityHomeBinding;
 import com.uny.crysdip.network.CrysdipService;
 import com.uny.crysdip.ui.adapter.TabAdapter;
-import com.uny.crysdip.viewmodel.IndustriViewModel;
-
-import java.util.List;
 
 import javax.inject.Inject;
-
-import me.tatarka.bindingcollectionadapter.ItemView;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 public class HomeActivity extends AppCompatActivity {
     private ActivityHomeBinding binding;
     private TabLayout tabLayout;
     private ViewPager viewPager;
 
-
-
     @Inject
     CrysdipService crysdipService;
+
+    @Inject
+    CacheAccountStore cacheAccountStore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         CrysdipApplication.getComponent().inject(this);
+
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_home);
 
@@ -91,7 +83,6 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
 
 
     }

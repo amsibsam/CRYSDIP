@@ -11,8 +11,9 @@ import com.google.gson.JsonElement;
 import com.squareup.okhttp.HttpUrl;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.logging.HttpLoggingInterceptor;
-import com.uny.crysdip.Pojo.IndustriDetail;
-import com.uny.crysdip.Pojo.ListIndustri;
+import com.uny.crysdip.pojo.IndustriDetail;
+import com.uny.crysdip.pojo.ListIndustri;
+import com.uny.crysdip.pojo.Mahasiswa;
 
 import java.io.IOException;
 import java.util.List;
@@ -23,7 +24,10 @@ import retrofit.GsonConverterFactory;
 import retrofit.HttpException;
 import retrofit.Retrofit;
 import retrofit.RxJavaCallAdapterFactory;
+import retrofit.http.Field;
+import retrofit.http.FormUrlEncoded;
 import retrofit.http.GET;
+import retrofit.http.POST;
 import retrofit.http.Query;
 import rx.Observable;
 import rx.functions.Func1;
@@ -37,7 +41,23 @@ public class CrysdipService {
         Observable<ListIndustriResponse> getListIndustri();
 
         @GET("industri/detail")
-        Observable<IndustriDetailResponse> getIndustriDetail(@Query("id") int id);
+        Observable<IndustriDetailResponse> getIndustriDetail(@Query("industri_id") int industri_id,
+                                                             @Query("mahasiswa_id") int mahasiswa_id);
+
+        @FormUrlEncoded
+        @POST("mahasiswa/login")
+        Observable<MahasiswaResponse> login(@Field("nim") String nim,
+                                            @Field("password") String password);
+
+        @FormUrlEncoded
+        @POST("industri/like")
+        Observable<FavoriteResponse> setFavorite(@Field("industri_id") int industriId,
+                                                 @Field("mahasiswa_id") int mahasiswaId);
+
+        @FormUrlEncoded
+        @POST("industri/unlike")
+        Observable<FavoriteResponse> setUnfavorite(@Field("industri_id") int industriId,
+                                                 @Field("mahasiswa_id") int mahasiswaId);
     }
 
     private CrysdipApi crysdipApi;
@@ -82,8 +102,36 @@ public class CrysdipService {
 
         // 5. Finally, we can create the model of the API.
         crysdipApi = retrofit.create(CrysdipApi.class);
+    }
 
+    public Observable<Mahasiswa> login(String nim, String password){
+        return crysdipApi.login(nim, password)
+                .map(new Func1<MahasiswaResponse, Mahasiswa>() {
+                    @Override
+                    public Mahasiswa call(MahasiswaResponse mahasiswaResponse) {
+                        return mahasiswaResponse.mahasiswa.toMahasiswaPojo();
+                    }
+                });
+    }
 
+    public Observable<String> setFavorite(int industriId, int mahasiswaId){
+        return crysdipApi.setFavorite(industriId, mahasiswaId)
+                .map(new Func1<FavoriteResponse, String>() {
+                    @Override
+                    public String call(FavoriteResponse favoriteResponse) {
+                        return favoriteResponse.status;
+                    }
+                });
+    }
+
+    public Observable<String> setUnfavorite(int industriId, int mahasiswaId){
+        return crysdipApi.setUnfavorite(industriId, mahasiswaId)
+                .map(new Func1<FavoriteResponse, String>() {
+                    @Override
+                    public String call(FavoriteResponse favoriteResponse) {
+                        return favoriteResponse.status;
+                    }
+                });
     }
 
     public Observable<ListIndustri> getListIndustri(){
@@ -102,31 +150,16 @@ public class CrysdipService {
                 });
     }
 
-    public Observable<IndustriDetail> getIndustriDetail(int id){
-        return crysdipApi.getIndustriDetail(id)
+    public Observable<IndustriDetail> getIndustriDetail(int industriId, int mahasiswaId){
+        return crysdipApi.getIndustriDetail(industriId, mahasiswaId)
                 .map(new Func1<IndustriDetailResponse, IndustriDetail>() {
                     @Override
                     public IndustriDetail call(IndustriDetailResponse industriDetailResponse) {
-                        return industriDetailResponse.industri.toIndustriDetailPojo();
+                        return industriDetailResponse.industri.toIndustriDetailPojo(industriDetailResponse.liked);
                     }
                 });
     }
 
-//    public Observable<Speciality> getSpeciality() {
-//        return crysdipApi.listSpeciality()
-//                .flatMap(new Func1<GenericResponse<ListSpecialityResponse>, Observable<ListSpecialityResponse.Speciality>>() {
-//                    @Override
-//                    public Observable<ListSpecialityResponse.Speciality> call(GenericResponse<ListSpecialityResponse> listSpecialityResponse) {
-//                        return Observable.from(listSpecialityResponse.parse(gson, ListSpecialityResponse.class).doctor_specialties);
-//                    }
-//                })
-//                .map(new Func1<ListSpecialityResponse.Speciality, Speciality>() {
-//                    @Override
-//                    public Speciality call(ListSpecialityResponse.Speciality speciality) {
-//                        return speciality.toSpecialityPojo();
-//                    }
-//                });
-//    }
 
 
 
@@ -212,6 +245,7 @@ public class CrysdipService {
     */
     private class IndustriDetailResponse{
         Industri industri;
+        boolean liked;
 
         class Industri{
             String namaIndustri;
@@ -222,12 +256,46 @@ public class CrysdipService {
             int jumlahKaryawan;
             String fotoUrl;
 
-            IndustriDetail toIndustriDetailPojo(){
-                return new IndustriDetail(namaIndustri, deskripsi, alamat, Double.parseDouble(lat), Double.parseDouble(lng), jumlahKaryawan, fotoUrl);
+            IndustriDetail toIndustriDetailPojo(boolean favorite){
+                return new IndustriDetail(namaIndustri, deskripsi, alamat, Double.parseDouble(lat), Double.parseDouble(lng), jumlahKaryawan, fotoUrl, favorite);
             }
         }
 
 
+    }
+
+    /*
+    {
+  "status": "success",
+  "data": {
+        "mahasiswa": {
+          "id": 6,
+          "nama_mahasiswa": "Rahardyan Bisma",
+          "alamat": "Pandes, Panggungharjo",
+          "nama_prodi": "Pendidikan Teknik Informatika",
+          "nim": "13520244022"
+        }
+      }
+    }
+    */
+    private static class MahasiswaResponse{
+        Mahasiswa mahasiswa;
+
+        class Mahasiswa{
+            int id;
+            String namaMahasiswa;
+            String alamat;
+            String namaProdi;
+            String nim;
+
+            com.uny.crysdip.pojo.Mahasiswa toMahasiswaPojo(){
+                return new com.uny.crysdip.pojo.Mahasiswa(id, namaMahasiswa, alamat, namaProdi, nim);
+            }
+        }
+    }
+
+    private static class FavoriteResponse{
+        String status;
     }
 
 

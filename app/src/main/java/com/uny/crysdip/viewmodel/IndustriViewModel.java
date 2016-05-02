@@ -4,9 +4,7 @@ import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.view.View;
 
-import com.uny.crysdip.Pojo.ListIndustri;
-
-import butterknife.Bind;
+import com.uny.crysdip.pojo.ListIndustri;
 
 /**
  * Created by rahardyan on 24/04/16.
