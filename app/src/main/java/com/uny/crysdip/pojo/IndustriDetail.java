@@ -5,7 +5,7 @@ package com.uny.crysdip.pojo;
  */
 public class IndustriDetail {
     private final String namaIndustri;
-    private final String Deskripsi;
+    private final String deskripsi;
     private final String alamat;
     private final double lat;
     private final double lng;
@@ -15,7 +15,7 @@ public class IndustriDetail {
 
     public IndustriDetail(String namaIndustri, String deskripsi, String alamat, double lat, double lng, int jumlahKaryawan, String fotoUrl, boolean isFavorite) {
         this.namaIndustri = namaIndustri;
-        Deskripsi = deskripsi;
+        this.deskripsi = deskripsi;
         this.alamat = alamat;
         this.lat = lat;
         this.lng = lng;
@@ -29,7 +29,7 @@ public class IndustriDetail {
     }
 
     public String getDeskripsi() {
-        return Deskripsi;
+        return deskripsi;
     }
 
     public String getAlamat() {

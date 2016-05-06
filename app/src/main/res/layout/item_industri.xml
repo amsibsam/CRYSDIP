@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     
     <data>
         <variable
@@ -11,47 +11,87 @@
     android:id="@+id/item_industri_wrapper"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@android:color/white"
-    android:padding="16dp"
+    android:paddingTop="4dp"
+    android:paddingLeft="4dp"
+    android:paddingRight="4dp"
     android:onClick="@{itemViewModel.viewIndustriDetailClickListener}">
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_vertical">
-        <ImageView
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:src="@drawable/ic_industri_item"/>
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingLeft="16dp">
-            <TextView
-                android:id="@+id/tv_industri_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@{itemViewModel.name}"
-                android:textSize="20sp"/>
+    <android.support.v7.widget.CardView
+        android:background="#ffffff"
+        app:cardUseCompatPadding="true"
+        app:cardElevation="3dp"
+        app:cardCornerRadius="3dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:id="@+id/image_industri_wrapper"
+                android:background="@color/grey"
+                android:layout_height="100dp">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/ic_work_blue_grey_200_48dp"/>
+                <ImageView
+                    android:id="@+id/industri_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    app:binding="@{itemViewModel.foto}"/>
+            </RelativeLayout>
             <LinearLayout
+                android:padding="16dp"
+                android:layout_below="@+id/image_industri_wrapper"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:gravity="center_vertical">
                 <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@drawable/ic_marker"/>
-                <TextView
-                    android:id="@+id/tv_alamat"
-                    android:layout_marginLeft="8dp"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:src="@drawable/ic_industri_item"/>
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{itemViewModel.alamat}"/>
-            </LinearLayout>
+                    android:orientation="vertical"
+                    android:paddingLeft="16dp">
+                    <TextView
+                        android:id="@+id/tv_industri_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:maxLines="1"
+                        android:maxLength="40"
+                        android:ellipsize="end"
+                        android:text="@{itemViewModel.name}"
+                        android:textSize="20sp"/>
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/ic_marker"/>
+                        <TextView
+                            android:layout_gravity="center_vertical"
+                            android:id="@+id/tv_alamat"
+                            android:maxLines="1"
+                            android:maxLength="40"
+                            android:ellipsize="end"
+                            android:layout_marginLeft="8dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@{itemViewModel.alamat}"/>
+                    </LinearLayout>
 
-        </LinearLayout>
-    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+
+
 </RelativeLayout>
 </layout>

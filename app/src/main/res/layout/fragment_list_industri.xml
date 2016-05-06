@@ -7,25 +7,36 @@
             name="industriListViewModel"
             type="com.uny.crysdip.ui.fragment.ListIndustriFragment.IndustriListViewModel"/>
     </data>
-<RelativeLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.fragment.ListIndustriFragment">
-    <ProgressBar
-        android:id="@+id/pb_loading"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:progressDrawable="@drawable/progress_bar_color"
-        style="?android:attr/progressBarStyleLarge"/>
-    <ListView
-        android:visibility="gone"
-        android:id="@+id/list_view"
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:items="@{industriListViewModel.items}"
-        app:itemView="@{industriListViewModel.itemView}">
+        android:scrollbars="none"
+        android:isScrollContainer="false"
+        android:fillViewport="true">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#ebebeb">
+            <ProgressBar
+                android:id="@+id/pb_loading"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:progressDrawable="@drawable/progress_bar_color"
+                style="?android:attr/progressBarStyleLarge"/>
+            <android.support.v7.widget.RecyclerView
+                android:scrollbars="vertical"
+                android:visibility="gone"
+                android:id="@+id/recycler_view"
+                android:paddingBottom="8dp"
+                android:divider="@null"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:items="@{industriListViewModel.items}"
+                app:itemView="@{industriListViewModel.itemView}">
 
-    </ListView>
-</RelativeLayout>
+            </android.support.v7.widget.RecyclerView>
+        </RelativeLayout>
+    </android.support.v4.widget.NestedScrollView>
+
 </layout>

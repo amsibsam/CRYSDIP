@@ -1,6 +1,7 @@
 package com.uny.crysdip.network;
 
 import android.content.Context;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
@@ -16,10 +17,7 @@ import com.uny.crysdip.pojo.ListIndustri;
 import com.uny.crysdip.pojo.Mahasiswa;
 import com.uny.crysdip.pojo.Testimoni;
 
-import junit.framework.Test;
-
 import java.io.IOException;
-import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -48,7 +46,7 @@ public class CrysdipService {
         Observable<IndustriDetailResponse> getIndustriDetail(@Query("industri_id") int industriId,
                                                              @Query("mahasiswa_id") int mahasiswaId);
 
-        @GET("industri/testimoni-list")
+        @GET("industri/testimoni-short")
         Observable<TestimoniListResponse> getTestimoni(@Query("industri_id") int industriId);
 
         @FormUrlEncoded
@@ -261,9 +259,10 @@ public class CrysdipService {
             int id;
             String namaIndustri;
             String alamat;
+            String fotoUrl;
 
             ListIndustri toIndustriPojo(){
-                return new ListIndustri(id, namaIndustri, alamat);
+                return new ListIndustri(id, namaIndustri, alamat, Uri.parse(fotoUrl));
             }
         }
     }
@@ -349,7 +348,7 @@ public class CrysdipService {
         List<Testimoni> testimoni;
 
         class Testimoni{
-            Date createdAt;
+            String createdAt;
             String namaMahasiswa;
             String nim;
             String testimoni;

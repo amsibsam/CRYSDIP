@@ -2,41 +2,36 @@ package com.uny.crysdip.viewmodel;
 
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
-import android.graphics.Color;
-import android.net.Uri;
-import android.util.Log;
 import android.view.View;
 
-import com.uny.crysdip.R;
 import com.uny.crysdip.pojo.ListIndustri;
-
-import java.util.Random;
+import com.uny.crysdip.pojo.Testimoni;
 
 /**
  * Created by rahardyan on 24/04/16.
  */
-public class IndustriViewModel extends BaseObservable {
-    private ListIndustri industri;
+public class TestimoniViewModel extends BaseObservable {
+    private Testimoni testimoni;
     private View.OnClickListener viewIndustriDetailClickListener;
 
-    public IndustriViewModel(ListIndustri industri, View.OnClickListener viewIndustriDetailClickListener){
-        this.industri = industri;
+    public TestimoniViewModel(Testimoni testimoni, View.OnClickListener viewIndustriDetailClickListener){
+        this.testimoni = testimoni;
         this.viewIndustriDetailClickListener = viewIndustriDetailClickListener;
     }
 
     @Bindable
     public String getName() {
-        return industri.getNamaIndustri();
+        return testimoni.getName();
     }
 
     @Bindable
-    public String getAlamat(){
-        return industri.getAlamat();
+    public String getTestimoni(){
+        return testimoni.getTestimoni();
     }
 
     @Bindable
-    public Uri getFoto(){
-        return industri.getFotoUrl();
+    public String getDate(){
+        return testimoni.getCreatedAt();
     }
 
     @Bindable

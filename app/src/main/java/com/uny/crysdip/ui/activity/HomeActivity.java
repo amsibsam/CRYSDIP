@@ -2,6 +2,7 @@ package com.uny.crysdip.ui.activity;
 
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.location.Geocoder;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -9,12 +10,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.google.android.gms.location.places.GeoDataApi;
 import com.uny.crysdip.CrysdipApplication;
 import com.uny.crysdip.R;
 import com.uny.crysdip.cache.CacheAccountStore;
 import com.uny.crysdip.databinding.ActivityHomeBinding;
 import com.uny.crysdip.network.CrysdipService;
 import com.uny.crysdip.ui.adapter.TabAdapter;
+
+import java.util.Locale;
 
 import javax.inject.Inject;
 
@@ -44,6 +48,7 @@ public class HomeActivity extends AppCompatActivity {
         tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.ic_tab_home), 0);
         tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.ic_tab_recomendation), 1);
         tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.ic_tab_favorite), 2);
+        tabLayout.setSelectedTabIndicatorColor(getResources().getColor(R.color.colorAccent));
 
         final PagerAdapter adapter = new TabAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));

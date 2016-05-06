@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <variable
+            name="itemListViewModel"
+            type="com.uny.crysdip.viewmodel.TestimoniViewModel"/>
+    </data>
+<RelativeLayout
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:paddingLeft="8dp"
+    android:paddingRight="8dp"
+    android:paddingBottom="3dp"
+    android:layout_height="match_parent">
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        android:textColor="@color/blueShade"
+        android:text="@{itemListViewModel.name}"/>
+    <TextView
+        android:id="@+id/tv_testimoni"
+        android:layout_below="@+id/tv_name"
+        android:layout_marginTop="3dp"
+        android:layout_marginLeft="12dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@{itemListViewModel.testimoni}"/>
+    <TextView
+        android:id="@+id/tv_date"
+        android:layout_below="@id/tv_testimoni"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="8sp"
+        android:layout_alignParentRight="true"
+        android:text="@{itemListViewModel.date}"/>
+</RelativeLayout>
+</layout>

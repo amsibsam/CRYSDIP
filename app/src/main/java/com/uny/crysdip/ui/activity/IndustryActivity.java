@@ -8,13 +8,22 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
+import android.databinding.ObservableArrayList;
+import android.databinding.ObservableList;
 import android.net.Uri;
 import android.provider.Settings;
+import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.DragEvent;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -24,15 +33,23 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.uny.crysdip.BR;
 import com.uny.crysdip.CrysdipApplication;
 import com.uny.crysdip.cache.CacheAccountStore;
 import com.uny.crysdip.pojo.IndustriDetail;
 import com.uny.crysdip.R;
 import com.uny.crysdip.databinding.ActivityIndustryBinding;
 import com.uny.crysdip.network.CrysdipService;
+import com.uny.crysdip.pojo.Testimoni;
+import com.uny.crysdip.ui.util.ExpandedListView;
+import com.uny.crysdip.viewmodel.TestimoniViewModel;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
+import me.tatarka.bindingcollectionadapter.ItemView;
+import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -47,6 +64,8 @@ public class IndustryActivity extends FragmentActivity implements OnMapReadyCall
     private int industriId;
     private int mahasiswaId;
     private AlertDialog alert;
+
+    private TestimoniListViewModel testimoniListViewModel = new TestimoniListViewModel();
 
     @Inject
     CrysdipService crysdipService;
@@ -69,6 +88,25 @@ public class IndustryActivity extends FragmentActivity implements OnMapReadyCall
                 .findFragmentById(R.id.map_fragment);
         mapFragment.getMapAsync(this);
 
+        binding.btnSendTestimoni.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendTestimoni(getIntent().getIntExtra(INDUSTRI_ID, 1), cacheAccountStore.getCachedAccount().getId(), binding.etTestimoni.getText().toString());
+            }
+        });
+
+
+        binding.appBar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                Log.d("amsibsam", "offset "+verticalOffset);
+                if (verticalOffset > -200 ){
+                    binding.tvIndustriName.setTextColor(getResources().getColor(R.color.colorAccent));
+                } else {
+                    binding.tvIndustriName.setTextColor(getResources().getColor(R.color.white));
+                }
+            }
+        });
         binding.checkboxFavorite.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -120,6 +158,8 @@ public class IndustryActivity extends FragmentActivity implements OnMapReadyCall
     @Override
     protected void onResume() {
         super.onResume();
+        binding.setTestimoniListViewModel(testimoniListViewModel);
+        getTestimoni();
     }
 
     @Override
@@ -152,8 +192,9 @@ public class IndustryActivity extends FragmentActivity implements OnMapReadyCall
                         progressDialog.dismiss();
                         boolean isFavorite = industriDetail.isFavorite();
                         markerTitle = industriDetail.getNamaIndustri().toString();
-                        binding.industriName.setText(industriDetail.getNamaIndustri().toString());
+
                         binding.tvAlamatIndustri.setText(industriDetail.getAlamat().toString());
+                        binding.tvIndustriName.setText(industriDetail.getNamaIndustri().toString());
 
                         if (isFavorite){
                             binding.checkboxFavorite.setChecked(true);
@@ -185,6 +226,77 @@ public class IndustryActivity extends FragmentActivity implements OnMapReadyCall
 
 
 
+    }
+
+    private void getTestimoni(){
+        crysdipService.getTestimoni(getIntent().getIntExtra(INDUSTRI_ID, -1))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .toList()
+                .subscribe(new Subscriber<List<Testimoni>>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.e("amsibsam", "error get testimoni "+e.toString());
+
+                    }
+
+                    @Override
+                    public void onNext(List<Testimoni> testimonis) {
+                        binding.pbLoading.setVisibility(View.GONE);
+                        binding.listView.setVisibility(View.VISIBLE);
+                        Log.d("amsibsam", "testimonis size "+testimonis.size());
+
+                        if (testimonis.size() == 0){
+                            binding.listView.setVisibility(View.GONE);
+                            binding.tvEmptyTestimoni.setVisibility(View.VISIBLE);
+                            binding.btnSeeMore.setVisibility(View.GONE);
+                        } else {
+                            binding.listView.setVisibility(View.VISIBLE);
+                            binding.tvEmptyTestimoni.setVisibility(View.GONE);
+                            binding.btnSeeMore.setVisibility(View.VISIBLE);
+                        }
+
+                        testimoniListViewModel.items.clear();
+                        for (final Testimoni testimoni : testimonis){
+                            Log.d("amsibsam", "nama testimoni "+testimoni.getName());
+                            testimoniListViewModel.items.add(new TestimoniViewModel(testimoni, new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+
+                                }
+                            }));
+                        }
+                    }
+                });
+    }
+
+    private void sendTestimoni(int industriId, int mahasiswaId, String testimoni){
+        crysdipService.postTestimoni(testimoni, mahasiswaId, industriId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<String>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Toast.makeText(IndustryActivity.this, "gagal mengirim", Toast.LENGTH_SHORT).show();
+                        Log.e("amsibsam", "error send testimoni "+e.toString());
+                    }
+
+                    @Override
+                    public void onNext(String s) {
+                        getTestimoni();
+                        binding.etTestimoni.setText("");
+                    }
+                });
     }
 
     private void isGoogleMapInstalled(String packagename, Context context) {
@@ -225,4 +337,10 @@ public class IndustryActivity extends FragmentActivity implements OnMapReadyCall
         alert = builder.create();
         alert.show();
     }
+
+    public static class TestimoniListViewModel{
+        public final ObservableList<TestimoniViewModel> items = new ObservableArrayList<>();
+        public final ItemView itemView = ItemView.of(BR.itemListViewModel, R.layout.item_testimoni_short);
+    }
+
 }
