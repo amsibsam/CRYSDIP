@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,8 @@ import com.uny.crysdip.network.CrysdipService;
 import com.uny.crysdip.pojo.ListIndustri;
 import com.uny.crysdip.ui.activity.IndustryActivity;
 import com.uny.crysdip.viewmodel.IndustriViewModel;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -75,7 +78,7 @@ public class FavoritFragment extends android.support.v4.app.Fragment {
     //////////////INNER CLASS SECTION/////////////
     public static class FavoriteIndustriListViewModel{
         public final ObservableList<IndustriViewModel> items = new ObservableArrayList<>();
-        public final ItemView itemView = ItemView.of(BR.itemFavoriteViewModel, R.layout.item_industri);
+        public final ItemView itemView = ItemView.of(BR.itemViewModel, R.layout.item_industri);
     }
 
 
@@ -83,10 +86,12 @@ public class FavoritFragment extends android.support.v4.app.Fragment {
     private void getFavoriteIndustriList(){
         binding.pbLoading.setVisibility(View.VISIBLE);
         binding.recyclerView.setVisibility(View.GONE);
+        favoriteIndustriListViewModel.items.clear();
         crysdipService.getFavoritedIndustri(cacheAccountStore.getCachedAccount().getId())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(new Subscriber<ListIndustri>() {
+                .toList()
+                .subscribe(new Subscriber<List<ListIndustri>>() {
                     @Override
                     public void onCompleted() {
 
@@ -98,17 +103,26 @@ public class FavoritFragment extends android.support.v4.app.Fragment {
                     }
 
                     @Override
-                    public void onNext(final ListIndustri listIndustri) {
+                    public void onNext(List<ListIndustri> listIndustris) {
                         binding.pbLoading.setVisibility(View.GONE);
                         binding.recyclerView.setVisibility(View.VISIBLE);
-                        favoriteIndustriListViewModel.items.add(new IndustriViewModel(listIndustri,
-                                new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        startActivity(new Intent(getActivity(), IndustryActivity.class)
-                                                .putExtra(INDUSTRI_ID, listIndustri.getId()));
-                                    }
-                                }));
+                        if (listIndustris.size() == 0){
+                            binding.tvEmpty.setVisibility(View.VISIBLE);
+                        } else {
+                            binding.tvEmpty.setVisibility(View.GONE);
+                        }
+
+                        for (final ListIndustri listIndustri : listIndustris){
+                            favoriteIndustriListViewModel.items.add(new IndustriViewModel(listIndustri,
+                                    new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            startActivity(new Intent(getActivity(), IndustryActivity.class)
+                                                    .putExtra(INDUSTRI_ID, listIndustri.getId()));
+                                        }
+                                    }));
+                        }
+
                     }
                 });
     }
