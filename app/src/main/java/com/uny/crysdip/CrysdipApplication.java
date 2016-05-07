@@ -3,7 +3,7 @@ package com.uny.crysdip;
 import android.app.Application;
 
 /**
- * Created by root on 09/04/16.
+ * Created by rahardyan on 09/04/16.
  */
 public class CrysdipApplication extends Application {
     private static CrysdipApplication instance;

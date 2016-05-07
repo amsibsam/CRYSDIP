@@ -11,19 +11,13 @@ import android.databinding.DataBindingUtil;
 import android.databinding.ObservableArrayList;
 import android.databinding.ObservableList;
 import android.net.Uri;
-import android.provider.Settings;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
-import android.view.DragEvent;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
-import android.widget.ListAdapter;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -31,7 +25,6 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.uny.crysdip.BR;
 import com.uny.crysdip.CrysdipApplication;
@@ -41,7 +34,6 @@ import com.uny.crysdip.R;
 import com.uny.crysdip.databinding.ActivityIndustryBinding;
 import com.uny.crysdip.network.CrysdipService;
 import com.uny.crysdip.pojo.Testimoni;
-import com.uny.crysdip.ui.util.ExpandedListView;
 import com.uny.crysdip.viewmodel.TestimoniViewModel;
 
 import java.util.List;
@@ -49,23 +41,18 @@ import java.util.List;
 import javax.inject.Inject;
 
 import me.tatarka.bindingcollectionadapter.ItemView;
-import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 public class IndustryActivity extends FragmentActivity implements OnMapReadyCallback {
     private static final String INDUSTRI_ID = "industri_id";
+    private TestimoniListViewModel testimoniListViewModel = new TestimoniListViewModel();
     ActivityIndustryBinding binding;
-    private GoogleMap map;
-    private double latitude;
-    private double longitude;
     private String markerTitle;
     private int industriId;
     private int mahasiswaId;
     private AlertDialog alert;
-
-    private TestimoniListViewModel testimoniListViewModel = new TestimoniListViewModel();
 
     @Inject
     CrysdipService crysdipService;
@@ -73,84 +60,38 @@ public class IndustryActivity extends FragmentActivity implements OnMapReadyCall
     @Inject
     CacheAccountStore cacheAccountStore;
 
+    //////////////////////LIFE CYCLE SECTION///////////////////
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         CrysdipApplication.getComponent().inject(this);
-
         binding = DataBindingUtil.setContentView(this, R.layout.activity_industry);
-
-        isGoogleMapInstalled("com.google.android.apps.maps", this);
-
         industriId = getIntent().getIntExtra(INDUSTRI_ID, 1);
         mahasiswaId = cacheAccountStore.getCachedAccount().getId();
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map_fragment);
-        mapFragment.getMapAsync(this);
+
+        //cek isGoogleMap installed or not
+        //if not installed go to playstore to download google map.
+        isGoogleMapInstalled("com.google.android.apps.maps", this);
+
+        //setup google map if installed.
+        setUpMap();
+
+        //change title color when toolbar collapsing.
+        changeTitleColorOnToolbarCollapsed();
 
         binding.btnSendTestimoni.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //send testimoni to server
                 sendTestimoni(getIntent().getIntExtra(INDUSTRI_ID, 1), cacheAccountStore.getCachedAccount().getId(), binding.etTestimoni.getText().toString());
             }
         });
 
-
-        binding.appBar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
-            @Override
-            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-                Log.d("amsibsam", "offset "+verticalOffset);
-                if (verticalOffset > -200 ){
-                    binding.tvIndustriName.setTextColor(getResources().getColor(R.color.colorAccent));
-                } else {
-                    binding.tvIndustriName.setTextColor(getResources().getColor(R.color.white));
-                }
-            }
-        });
         binding.checkboxFavorite.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked){
-                    crysdipService.setFavorite(industriId, mahasiswaId)
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(new Subscriber<String>() {
-                                @Override
-                                public void onCompleted() {
-
-                                }
-
-                                @Override
-                                public void onError(Throwable e) {
-
-                                }
-
-                                @Override
-                                public void onNext(String s) {
-
-                                }
-                            });
-                } else {
-                    crysdipService.setUnfavorite(industriId, mahasiswaId)
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(new Subscriber<String>() {
-                                @Override
-                                public void onCompleted() {
-
-                                }
-
-                                @Override
-                                public void onError(Throwable e) {
-
-                                }
-
-                                @Override
-                                public void onNext(String s) {
-
-                                }
-                            });
-                }
+                //if isChecked = true, then favorite this industri, if isChecked false then unfavorite this industri
+                setFavoriteOrUnFavorite(isChecked);
             }
         });
     }
@@ -164,70 +105,16 @@ public class IndustryActivity extends FragmentActivity implements OnMapReadyCall
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        map = googleMap;
-        map.getUiSettings().setMapToolbarEnabled(true);
-        final boolean[] toolbarButton = {false};
-
-        final ProgressDialog progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Harap tunggu..");
-        progressDialog.show();
-        crysdipService.getIndustriDetail(industriId, mahasiswaId)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe(new Subscriber<IndustriDetail>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Log.e("amsibsam", "error get detail "+e.toString());
-                        Toast.makeText(IndustryActivity.this, "tidak terhubung ke server", Toast.LENGTH_SHORT).show();
-                        progressDialog.dismiss();
-                    }
-
-                    @Override
-                    public void onNext(IndustriDetail industriDetail) {
-                        progressDialog.dismiss();
-                        boolean isFavorite = industriDetail.isFavorite();
-                        markerTitle = industriDetail.getNamaIndustri().toString();
-
-                        binding.tvAlamatIndustri.setText(industriDetail.getAlamat().toString());
-                        binding.tvIndustriName.setText(industriDetail.getNamaIndustri().toString());
-
-                        if (isFavorite){
-                            binding.checkboxFavorite.setChecked(true);
-                        } else {
-                            binding.checkboxFavorite.setChecked(false);
-                        }
-                        // Add a marker in Sydney and move the camera
-                        final LatLng tempat = new LatLng(industriDetail.getLat(), industriDetail.getLng());
-                        Log.d("amsibsam", "tempat "+industriDetail.getLat()+", "+industriDetail.getLng());
-                        map.addMarker(new MarkerOptions().position(tempat).title(industriDetail.getNamaIndustri()));
-                        map.moveCamera(CameraUpdateFactory.newLatLngZoom(tempat, 12f));
-
-                        Log.d("amsibsam", "onNext");
-
-                    }
-                });
-
-//        map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-//            @Override
-//            public boolean onMarkerClick(Marker marker) {
-//                Toast.makeText(IndustryActivity.this, "Clicked", Toast.LENGTH_SHORT).show();
-//                binding.checkboxFavorite.setTranslationY(-60);
-//                marker.showInfoWindow();
-//                toolbarButton[0] = true;
-//                return true;
-//            }
-//        });
-
-
-
-
+        getIndustriDetailAndSetToView(googleMap);
     }
 
+    ///////////////INNER CLASS SECTION//////////////////
+    public static class TestimoniListViewModel{
+        public final ObservableList<TestimoniViewModel> items = new ObservableArrayList<>();
+        public final ItemView itemView = ItemView.of(BR.itemListViewModel, R.layout.item_testimoni_short);
+    }
+
+    /////////////////METHOD SECTION//////////////////////
     private void getTestimoni(){
         crysdipService.getTestimoni(getIntent().getIntExtra(INDUSTRI_ID, -1))
                 .subscribeOn(Schedulers.io())
@@ -299,6 +186,27 @@ public class IndustryActivity extends FragmentActivity implements OnMapReadyCall
                 });
     }
 
+    private void setUpMap(){
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map_fragment);
+        mapFragment.getMapAsync(this);
+    }
+
+    private void changeTitleColorOnToolbarCollapsed() {
+        binding.appBar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                Log.d("amsibsam", "offset "+verticalOffset);
+                if (verticalOffset > -200 ){
+                    binding.tvIndustriName.setTextColor(getResources().getColor(R.color.colorAccent));
+                } else {
+                    binding.tvIndustriName.setTextColor(getResources().getColor(R.color.white));
+                }
+            }
+        });
+    }
+
+
     private void isGoogleMapInstalled(String packagename, Context context) {
         PackageManager pm = context.getPackageManager();
         try {
@@ -338,9 +246,95 @@ public class IndustryActivity extends FragmentActivity implements OnMapReadyCall
         alert.show();
     }
 
-    public static class TestimoniListViewModel{
-        public final ObservableList<TestimoniViewModel> items = new ObservableArrayList<>();
-        public final ItemView itemView = ItemView.of(BR.itemListViewModel, R.layout.item_testimoni_short);
+    private void getIndustriDetailAndSetToView(final GoogleMap map){
+        map.getUiSettings().setMapToolbarEnabled(true);
+        final ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Harap tunggu..");
+        progressDialog.show();
+        crysdipService.getIndustriDetail(industriId, mahasiswaId)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Subscriber<IndustriDetail>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.e("amsibsam", "error get detail "+e.toString());
+                        Toast.makeText(IndustryActivity.this, "tidak terhubung ke server", Toast.LENGTH_SHORT).show();
+                        progressDialog.dismiss();
+                    }
+
+                    @Override
+                    public void onNext(IndustriDetail industriDetail) {
+                        progressDialog.dismiss();
+                        boolean isFavorite = industriDetail.isFavorite();
+                        markerTitle = industriDetail.getNamaIndustri().toString();
+
+                        binding.tvAlamatIndustri.setText(industriDetail.getAlamat().toString());
+                        binding.tvIndustriName.setText(industriDetail.getNamaIndustri().toString());
+
+                        if (isFavorite){
+                            binding.checkboxFavorite.setChecked(true);
+                        } else {
+                            binding.checkboxFavorite.setChecked(false);
+                        }
+                        // Add a marker in Sydney and move the camera
+                        final LatLng tempat = new LatLng(industriDetail.getLat(), industriDetail.getLng());
+                        Log.d("amsibsam", "tempat "+industriDetail.getLat()+", "+industriDetail.getLng());
+                        map.addMarker(new MarkerOptions().position(tempat).title(industriDetail.getNamaIndustri()));
+                        map.moveCamera(CameraUpdateFactory.newLatLngZoom(tempat, 12f));
+
+                        Log.d("amsibsam", "onNext");
+
+                    }
+                });
+    }
+
+    private void setFavoriteOrUnFavorite(boolean isChecked){
+        if (isChecked){
+            crysdipService.setFavorite(industriId, mahasiswaId)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Subscriber<String>() {
+                        @Override
+                        public void onCompleted() {
+
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+
+                        }
+
+                        @Override
+                        public void onNext(String s) {
+
+                        }
+                    });
+        } else {
+            crysdipService.setUnfavorite(industriId, mahasiswaId)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Subscriber<String>() {
+                        @Override
+                        public void onCompleted() {
+
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+
+                        }
+
+                        @Override
+                        public void onNext(String s) {
+
+                        }
+                    });
+        }
     }
 
 }

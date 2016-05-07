@@ -35,7 +35,7 @@ import rx.Observable;
 import rx.functions.Func1;
 
 /**
- * Created by root on 09/04/16.
+ * Created by rahardyan on 09/04/16.
  */
 public class CrysdipService {
     private interface CrysdipApi {
@@ -45,6 +45,9 @@ public class CrysdipService {
         @GET("industri/detail")
         Observable<IndustriDetailResponse> getIndustriDetail(@Query("industri_id") int industriId,
                                                              @Query("mahasiswa_id") int mahasiswaId);
+
+        @GET("industri/favorite")
+        Observable<ListIndustriResponse> getFavoritedIndustri(@Query("mahasiswa_id") int mahasiswaId);
 
         @GET("industri/testimoni-short")
         Observable<TestimoniListResponse> getTestimoni(@Query("industri_id") int industriId);
@@ -195,6 +198,22 @@ public class CrysdipService {
                     @Override
                     public Testimoni call(TestimoniListResponse.Testimoni testimoni) {
                         return testimoni.toTestimoniPojo();
+                    }
+                });
+    }
+
+    public Observable<ListIndustri> getFavoritedIndustri(int mahasiswaId){
+        return crysdipApi.getFavoritedIndustri(mahasiswaId)
+                .flatMap(new Func1<ListIndustriResponse, Observable<ListIndustriResponse.Industri>>() {
+                    @Override
+                    public Observable<ListIndustriResponse.Industri> call(ListIndustriResponse listIndustriResponse) {
+                        return Observable.from(listIndustriResponse.industris);
+                    }
+                })
+                .map(new Func1<ListIndustriResponse.Industri, ListIndustri>() {
+                    @Override
+                    public ListIndustri call(ListIndustriResponse.Industri industri) {
+                        return industri.toIndustriPojo();
                     }
                 });
     }

@@ -9,7 +9,7 @@ import com.uny.crysdip.ui.fragment.ListIndustriFragment;
 import com.uny.crysdip.ui.fragment.RecomendationFragment;
 
 /**
- * Created by root on 21/03/16.
+ * Created by rahardyan on 21/03/16.
  */
 public class TabAdapter extends FragmentStatePagerAdapter {
     int mNumOfTabs;

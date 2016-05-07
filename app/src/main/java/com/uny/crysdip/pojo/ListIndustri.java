@@ -3,7 +3,7 @@ package com.uny.crysdip.pojo;
 import android.net.Uri;
 
 /**
- * Created by root on 03/04/16.
+ * Created by rahardyan on 03/04/16.
  */
 public class ListIndustri {
     private final int id;

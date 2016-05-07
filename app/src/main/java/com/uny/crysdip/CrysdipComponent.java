@@ -9,6 +9,7 @@ import com.uny.crysdip.ui.activity.HomeActivity;
 import com.uny.crysdip.ui.activity.IndustryActivity;
 import com.uny.crysdip.ui.activity.IntroActivity;
 import com.uny.crysdip.ui.activity.LoginActivity;
+import com.uny.crysdip.ui.fragment.FavoritFragment;
 import com.uny.crysdip.ui.fragment.Intro1stFragment;
 import com.uny.crysdip.ui.fragment.ListIndustriFragment;
 
@@ -17,7 +18,7 @@ import javax.inject.Singleton;
 import dagger.Component;
 
 /**
- * Created by root on 29/03/16.
+ * Created by rahardyan on 29/03/16.
  */
 @Singleton
 @Component(modules = {
@@ -33,6 +34,7 @@ public interface CrysdipComponent {
     void inject(IndustryActivity industryActivity);
     void inject(IntroActivity introActivity);
     void inject(Intro1stFragment intro1stFragment);
+    void inject(FavoritFragment favoritFragment);
 
     final class Initializer {
         public static CrysdipComponent init(Application application) {

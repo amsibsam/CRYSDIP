@@ -1,15 +1,30 @@
-<layout>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="itemFavoriteViewModel"
+            type="com.uny.crysdip.ui.fragment.FavoritFragment.FavoriteIndustriListViewModel"/>
+    </data>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.fragment.FavoritFragment">
-    <ListView
-        android:id="@+id/list_view"
+    <ProgressBar
+        android:id="@+id/pb_loading"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:progressDrawable="@drawable/progress_bar_color"/>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:paddingBottom="8dp"
+        android:divider="@null"
+        android:visibility="gone"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        
-    </ListView>
+        android:layout_height="match_parent"
+        app:items="@{itemFavoriteViewModel.items}"
+        app:itemView="@{itemFavoriteViewModel.itemView}">
 
-</FrameLayout>
+    </android.support.v7.widget.RecyclerView>
+
+</RelativeLayout>
 </layout>

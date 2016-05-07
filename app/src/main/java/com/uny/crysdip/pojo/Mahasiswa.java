@@ -1,7 +1,7 @@
 package com.uny.crysdip.pojo;
 
 /**
- * Created by root on 03/04/16.
+ * Created by rahardyan on 03/04/16.
  */
 public class Mahasiswa {
     private final int id;

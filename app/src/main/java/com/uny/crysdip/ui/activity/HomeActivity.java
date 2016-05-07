@@ -37,10 +37,7 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         CrysdipApplication.getComponent().inject(this);
-
-
         binding = DataBindingUtil.setContentView(this, R.layout.activity_home);
-
         tabLayout = binding.tabLayout;
         viewPager = binding.pager;
 
@@ -53,7 +50,6 @@ public class HomeActivity extends AppCompatActivity {
         final PagerAdapter adapter = new TabAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         viewPager.setAdapter(adapter);
-
 
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -88,8 +84,6 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
-
     }
 
 

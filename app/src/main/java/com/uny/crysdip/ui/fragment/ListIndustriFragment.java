@@ -57,6 +57,7 @@ public class ListIndustriFragment extends android.support.v4.app.Fragment {
         return listIndustriFragment;
     }
 
+    //////////////////////LIFE CYCLE SECTION////////////////////////////
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,17 +68,7 @@ public class ListIndustriFragment extends android.support.v4.app.Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentListIndustriBinding.inflate(inflater, container, false);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-// Control orientation of the items
-// also supports LinearLayoutManager.HORIZONTAL
-        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-// Optionally customize the position you want to default scroll to
-        layoutManager.scrollToPosition(0);
-
-        binding.recyclerView.setLayoutManager(layoutManager);
-        binding.recyclerView.setNestedScrollingEnabled(false);
-        binding.recyclerView.setHasFixedSize(true);
-        binding.recyclerView.setItemAnimator(new SlideInLeftAnimator());
+        setUpRecyclerView();
 
         // Inflate the layout for this fragment
         return binding.getRoot();
@@ -88,7 +79,24 @@ public class ListIndustriFragment extends android.support.v4.app.Fragment {
         super.onResume();
         binding.setIndustriListViewModel(industriListViewModel);
         getIndustriList();
+    }
 
+    ////////////////INNER CLASS SECTION////////////////////
+    public static class IndustriListViewModel {
+        public final ObservableList<IndustriViewModel> items = new ObservableArrayList<>();
+        public final ItemView itemView = ItemView.of(BR.itemViewModel, R.layout.item_industri);
+    }
+
+    //////////////////METHOD SECTINO///////////////////////
+    private void setUpRecyclerView() {
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        layoutManager.scrollToPosition(0);
+
+        binding.recyclerView.setLayoutManager(layoutManager);
+        binding.recyclerView.setNestedScrollingEnabled(false);
+        binding.recyclerView.setHasFixedSize(true);
+        binding.recyclerView.setItemAnimator(new SlideInLeftAnimator());
     }
 
     private void getIndustriList() {
@@ -123,11 +131,6 @@ public class ListIndustriFragment extends android.support.v4.app.Fragment {
                            }
                 );
 
-    }
-
-    public static class IndustriListViewModel {
-        public final ObservableList<IndustriViewModel> items = new ObservableArrayList<>();
-        public final ItemView itemView = ItemView.of(BR.itemViewModel, R.layout.item_industri);
     }
 
 }
