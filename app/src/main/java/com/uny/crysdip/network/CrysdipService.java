@@ -52,6 +52,26 @@ public class CrysdipService {
         @GET("industri/testimoni-short")
         Observable<TestimoniListResponse> getTestimoni(@Query("industri_id") int industriId);
 
+        @GET("industri/testimoni")
+        Observable<TestimoniListResponse> getTestimoniLong(@Query("industri_id") int industriId);
+
+        @FormUrlEncoded
+        @POST("industri/cari")
+        Observable<ListIndustriResponse> getRecomendation(@Field("nama_kategori[]") String namaKategori1,
+                                                          @Field("nama_kategori[]") String namaKategori2,
+                                                          @Field("nama_kategori[]") String namaKategori3,
+                                                          @Field("nama_kategori[]") String namaKategori4,
+                                                          @Field("nama_kategori[]") String namaKategori5,
+                                                          @Field("spesifikasi[]") String spesifikasi1,
+                                                          @Field("spesifikasi[]") String spesifikasi2,
+                                                          @Field("spesifikasi[]") String spesifikasi3,
+                                                          @Field("spesifikasi[]") String spesifikasi4,
+                                                          @Field("spesifikasi[]") String spesifikasi5,
+                                                          @Field("spesifikasi[]") String spesifikasi6,
+                                                          @Field("spesifikasi[]") String spesifikasi7,
+                                                          @Field("spesifikasi[]") String spesifikasi8,
+                                                          @Field("spesifikasi[]") String spesifikasi9);
+
         @FormUrlEncoded
         @POST("mahasiswa/login")
         Observable<MahasiswaResponse> login(@Field("nim") String nim,
@@ -86,6 +106,7 @@ public class CrysdipService {
             @Override
             public HttpUrl url() {
                 final String baseUrl = "http://crysdip.herokuapp.com/api/";
+//                final String baseUrl = "http://192.168.1.25:8001/api/";
                 return HttpUrl.parse(baseUrl);
             }
         };
@@ -202,6 +223,24 @@ public class CrysdipService {
                 });
     }
 
+    public Observable<Testimoni> getTestimoniLong(int industriId){
+        return crysdipApi.getTestimoniLong(industriId)
+                .flatMap(new Func1<TestimoniListResponse, Observable<TestimoniListResponse.Testimoni>>() {
+                    @Override
+                    public Observable<TestimoniListResponse.Testimoni> call(TestimoniListResponse testimoniListResponse) {
+                        return Observable.from(testimoniListResponse.testimoni);
+                    }
+                })
+                .map(new Func1<TestimoniListResponse.Testimoni, Testimoni>() {
+                    @Override
+                    public Testimoni call(TestimoniListResponse.Testimoni testimoni) {
+                        return testimoni.toTestimoniPojo();
+                    }
+                });
+    }
+
+
+
     public Observable<ListIndustri> getFavoritedIndustri(int mahasiswaId){
         return crysdipApi.getFavoritedIndustri(mahasiswaId)
                 .flatMap(new Func1<ListIndustriResponse, Observable<ListIndustriResponse.Industri>>() {
@@ -216,6 +255,37 @@ public class CrysdipService {
                         return industri.toIndustriPojo();
                     }
                 });
+    }
+
+    public Observable<ListIndustri> getRecomendation(String kategori1,
+                                                     String kategori2,
+                                                     String kategori3,
+                                                     String kategori4,
+                                                     String kategori5,
+                                                     String spesifikasi1,
+                                                     String spesifikasi2,
+                                                     String spesifikasi3,
+                                                     String spesifikasi4,
+                                                     String spesifikasi5,
+                                                     String spesifikasi6,
+                                                     String spesifikasi7,
+                                                     String spesifikasi8,
+                                                     String spesifikasi9){
+        return crysdipApi.getRecomendation(kategori1, kategori2, kategori3, kategori4, kategori5,
+                spesifikasi1, spesifikasi2, spesifikasi3, spesifikasi4, spesifikasi5, spesifikasi6, spesifikasi7, spesifikasi8, spesifikasi9)
+                .flatMap(new Func1<ListIndustriResponse, Observable<ListIndustriResponse.Industri>>() {
+                    @Override
+                    public Observable<ListIndustriResponse.Industri> call(ListIndustriResponse listIndustriResponse) {
+                        return Observable.from(listIndustriResponse.industris);
+                    }
+                })
+                .map(new Func1<ListIndustriResponse.Industri, ListIndustri>() {
+                    @Override
+                    public ListIndustri call(ListIndustriResponse.Industri industri) {
+                        return industri.toIndustriPojo();
+                    }
+                });
+
     }
 
 

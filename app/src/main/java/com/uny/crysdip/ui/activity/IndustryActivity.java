@@ -94,6 +94,13 @@ public class IndustryActivity extends FragmentActivity implements OnMapReadyCall
                 setFavoriteOrUnFavorite(isChecked);
             }
         });
+
+        binding.btnSeeMore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(IndustryActivity.this, TestimoniActivity.class).putExtra(INDUSTRI_ID, getIntent().getIntExtra(INDUSTRI_ID, 1)));
+            }
+        });
     }
 
     @Override

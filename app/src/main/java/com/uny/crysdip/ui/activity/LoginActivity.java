@@ -91,6 +91,8 @@ public class LoginActivity extends AppCompatActivity {
                         if (e.getMessage().contains("401")) {
                             Toast.makeText(LoginActivity.this, "Password atau nim salah", Toast.LENGTH_SHORT).show();
                         }
+
+                        Toast.makeText(LoginActivity.this, "Tidak terhubung ke server", Toast.LENGTH_SHORT).show();
                         progressDialog.dismiss();
                     }
 

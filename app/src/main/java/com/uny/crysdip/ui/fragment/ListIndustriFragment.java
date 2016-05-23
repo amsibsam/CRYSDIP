@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.OvershootInterpolator;
+import android.widget.Toast;
 
 import com.uny.crysdip.BR;
 import com.uny.crysdip.CrysdipApplication;
@@ -100,6 +101,8 @@ public class ListIndustriFragment extends android.support.v4.app.Fragment {
     }
 
     private void getIndustriList() {
+        binding.pbLoading.setVisibility(View.VISIBLE);
+        binding.recyclerView.setVisibility(View.GONE);
         industriListViewModel.items.clear();
         crysdipService.getListIndustri()
                 .observeOn(AndroidSchedulers.mainThread())
@@ -113,6 +116,8 @@ public class ListIndustriFragment extends android.support.v4.app.Fragment {
                                @Override
                                public void onError(Throwable e) {
                                    Log.e("amsibsam", "error get industri " + e.toString());
+                                   binding.pbLoading.setVisibility(View.GONE);
+                                   Toast.makeText(getActivity(), "Koneksi Bermasalah", Toast.LENGTH_SHORT).show();
                                }
 
                                @Override

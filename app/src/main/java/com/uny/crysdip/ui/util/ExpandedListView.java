@@ -1,10 +1,10 @@
 package com.uny.crysdip.ui.util;
 
+
 import android.content.Context;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.widget.ListView;
-
 /**
  * Created by rahardyan on 15/10/15.
  */

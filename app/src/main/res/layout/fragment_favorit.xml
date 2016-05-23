@@ -1,41 +1,55 @@
-<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
     <data>
+
         <variable
             name="itemFavoriteViewModel"
-            type="com.uny.crysdip.ui.fragment.FavoritFragment.FavoriteIndustriListViewModel"/>
+            type="com.uny.crysdip.ui.fragment.FavoritFragment.FavoriteIndustriListViewModel" />
     </data>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.fragment.FavoritFragment">
-    <ProgressBar
-        android:visibility="gone"
-        android:id="@+id/pb_loading"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_centerInParent="true"
-        android:progressDrawable="@drawable/progress_bar_color"/>
-    <TextView
-        android:id="@+id/tv_empty"
-        android:visibility="gone"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:textSize="15sp"
-        android:text="belum ada industri yang menjadi favorit"
-        />
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_view"
-        android:paddingBottom="8dp"
-        android:divider="@null"
-        android:visibility="gone"
+
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:items="@{itemFavoriteViewModel.items}"
-        app:itemView="@{itemFavoriteViewModel.itemView}">
+        android:fillViewport="true"
+        android:isScrollContainer="false"
+        android:scrollbars="none">
 
-    </android.support.v7.widget.RecyclerView>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:context=".ui.fragment.FavoritFragment">
 
-</RelativeLayout>
+            <ProgressBar
+                android:id="@+id/pb_loading"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_centerInParent="true"
+                android:progressDrawable="@drawable/progress_bar_color"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/tv_empty"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="belum ada industri yang menjadi favorit"
+                android:textSize="15sp"
+                android:visibility="gone" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:divider="@null"
+                android:paddingBottom="8dp"
+                android:visibility="gone"
+                app:itemView="@{itemFavoriteViewModel.itemView}"
+                app:items="@{itemFavoriteViewModel.items}">
+
+            </android.support.v7.widget.RecyclerView>
+
+        </RelativeLayout>
+    </android.support.v4.widget.NestedScrollView>
 </layout>

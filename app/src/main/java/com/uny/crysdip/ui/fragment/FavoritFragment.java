@@ -64,6 +64,7 @@ public class FavoritFragment extends android.support.v4.app.Fragment {
         binding = FragmentFavoritBinding.inflate(inflater, container, false);
         binding.setItemFavoriteViewModel(favoriteIndustriListViewModel);
 
+        binding.recyclerView.setNestedScrollingEnabled(false);
         setUpRecyclerView();
         // Inflate the layout for this fragment
         return binding.getRoot();
@@ -99,7 +100,7 @@ public class FavoritFragment extends android.support.v4.app.Fragment {
 
                     @Override
                     public void onError(Throwable e) {
-
+                        Log.e("asmibsam", "error get favorit "+e.toString());
                     }
 
                     @Override

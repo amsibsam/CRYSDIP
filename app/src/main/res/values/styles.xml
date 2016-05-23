@@ -15,6 +15,15 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@android:color/white</item>
     </style>
+    
+    <!--splash screen style-->
+    <style name="AppThemeSplash" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimaryDark">@color/white</item>
+        <item name="colorAccent">@android:color/white</item>
+        <item name="android:windowFrame">@null</item>
+        <item name="android:padding">0dp</item>
+    </style>
 
     <style name="EditTextWhite" parent="Base.Widget.AppCompat.EditText">
         <item name="colorControlNormal">@android:color/white</item>

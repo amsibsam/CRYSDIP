@@ -1,159 +1,179 @@
-<layout>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.fragment.RecomendationFragment">
-    <RelativeLayout
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <ScrollView
+        android:layout_height="match_parent"
+        tools:context=".ui.fragment.RecomendationFragment">
+
+        <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_above="@+id/btn_rekomendasi">
-            <LinearLayout
+            android:layout_above="@+id/btn_rekomendasi"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="8dp"
-                android:orientation="vertical">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="@dimen/btn_text_normal"
-                    android:text="Kota/Kabupaten"
-                    android:textColor="@android:color/darker_gray"/>
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0.5dp"
-                    android:layout_marginTop="6dp"
-                    android:background="@android:color/darker_gray"/>
-                <Spinner
-                    android:id="@+id/spinner_tempat"
-                    android:layout_width="wrap_content"
-                    android:layout_marginLeft="6dp"
-                    android:layout_height="match_parent"/>
-                <TextView
-                    android:layout_marginTop="8dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="@dimen/btn_text_normal"
-                    android:text="Kategori Industri"
-                    android:textColor="@android:color/darker_gray"/>
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0.5dp"
-                    android:layout_marginTop="6dp"
-                    android:background="@android:color/darker_gray"/>
+                android:layout_height="match_parent">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="6dp"
-                    android:orientation="vertical">
-                    <CheckBox
-                        android:id="@+id/cb_jaringan"
+                    android:orientation="vertical"
+                    android:padding="8dp">
+                    <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Jaringan"/>
-                    <CheckBox
-                        android:id="@+id/cb_multimedia"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="multimedia"/>
-                    <CheckBox
-                        android:id="@+id/cb_pemrograman"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Pemrograman"/>
-                </LinearLayout>
-                <TextView
-                    android:layout_marginTop="8dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="@dimen/btn_text_normal"
-                    android:text="Minat dan Keahlian"
-                    android:textColor="@android:color/darker_gray"/>
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0.5dp"
-                    android:layout_marginTop="6dp"
-                    android:background="@android:color/darker_gray"/>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:paddingLeft="6dp">
+                        android:layout_marginTop="8dp"
+                        android:text="Kategori Industri"
+                        android:textColor="@android:color/darker_gray"
+                        android:textSize="@dimen/btn_text_normal" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        android:layout_marginTop="6dp"
+                        android:background="@android:color/darker_gray" />
+
                     <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-                        <CheckBox
-                            android:id="@+id/cb_instalasi_jaringan"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Instalasi Jaringan"/>
-                        <CheckBox
-                            android:id="@+id/cb_administrasi_jaringan"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Administrasi Jaringan"/>
-                        <CheckBox
-                            android:id="@+id/cb_android"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Android "/>
-                        <CheckBox
-                            android:id="@+id/cb_windows_phone"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Windows Phone"/>
-                        <CheckBox
-                            android:id="@+id/cb_backend"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Backend"/>
-                    </LinearLayout>
-                    <LinearLayout
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="6dp"
                         android:orientation="vertical">
+
                         <CheckBox
-                            android:id="@+id/cb_administrasi_server"
+                            android:id="@+id/cb_networking"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Administrasi Server"/>
+                            android:text="Networking" />
+
                         <CheckBox
-                            android:id="@+id/cb_desainer"
+                            android:id="@+id/cb_mobile_programming"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="UI/UX desainer"/>
+                            android:text="Mobile Programming" />
+
                         <CheckBox
-                            android:id="@+id/cb_ios"
+                            android:id="@+id/cb_desktop_programming"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="IOS"/>
+                            android:text="Desktop Programming" />
+
                         <CheckBox
-                            android:id="@+id/cb_frontend"
+                            android:id="@+id/cb_web_programming"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Frontend Web"/>
+                            android:text="Web Programming" />
+
+                        <CheckBox
+                            android:id="@+id/cb_multimedia"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Multimedia" />
                     </LinearLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="Minat dan Keahlian"
+                        android:textColor="@android:color/darker_gray"
+                        android:textSize="@dimen/btn_text_normal" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        android:layout_marginTop="6dp"
+                        android:background="@android:color/darker_gray" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingLeft="6dp">
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+                            <CheckBox
+                                android:id="@+id/cb_instalasi_jaringan"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Instalasi Jaringan" />
+
+                            <CheckBox
+                                android:id="@+id/cb_administrasi_jaringan"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Administrasi Jaringan" />
+
+                            <CheckBox
+                                android:id="@+id/cb_android"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Android " />
+
+                            <CheckBox
+                                android:id="@+id/cb_windows_phone"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Windows Phone" />
+
+                            <CheckBox
+                                android:id="@+id/cb_backend"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Backend" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="6dp"
+                            android:orientation="vertical">
+
+                            <CheckBox
+                                android:id="@+id/cb_administrasi_server"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Administrasi Server" />
+
+                            <CheckBox
+                                android:id="@+id/cb_desainer"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="UI/UX desainer" />
+
+                            <CheckBox
+                                android:id="@+id/cb_ios"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="IOS" />
+
+                            <CheckBox
+                                android:id="@+id/cb_frontend"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Frontend Web" />
+                        </LinearLayout>
+                    </LinearLayout>
+                    <Button
+                        android:id="@+id/btn_rekomendasi"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="8dp"
+                        android:layout_marginTop="24dp"
+                        android:layout_alignParentBottom="true"
+                        android:background="@drawable/btn_bottom_accent"
+                        android:padding="8dp"
+                        android:text="LIHAT REKOMENDASI"
+                        android:textColor="@android:color/white" />
                 </LinearLayout>
-            </LinearLayout>
 
-        </ScrollView>
-        <Button
-            android:id="@+id/btn_rekomendasi"
-            android:layout_alignParentBottom="true"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="8dp"
-            android:text="LIHAT REKOMENDASI"
-            android:textColor="@android:color/white"
-            android:background="@drawable/btn_bottom_accent"
-            />
-    </RelativeLayout>
+            </RelativeLayout>
+        </android.support.v4.widget.NestedScrollView>
 
 
-</FrameLayout>
+    </FrameLayout>
 </layout>
