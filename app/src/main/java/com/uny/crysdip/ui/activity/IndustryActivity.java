@@ -69,6 +69,8 @@ public class IndustryActivity extends FragmentActivity implements OnMapReadyCall
         industriId = getIntent().getIntExtra(INDUSTRI_ID, 1);
         mahasiswaId = cacheAccountStore.getCachedAccount().getId();
 
+        Log.d("amsibsam", "industri id "+industriId);
+
         //cek isGoogleMap installed or not
         //if not installed go to playstore to download google map.
         isGoogleMapInstalled("com.google.android.apps.maps", this);

@@ -39,11 +39,13 @@
             </RelativeLayout>
         </android.support.v7.widget.Toolbar>
 
-        <android.support.v7.widget.RecyclerView
+        <ListView
             android:id="@+id/recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/toolbar"></android.support.v7.widget.RecyclerView>
+            android:layout_below="@+id/toolbar"
+            app:items="@{itemTestimoniLong.items}"
+            app:itemView="@{itemTestimoniLong.itemView}"></ListView>
 
     </RelativeLayout>
 </layout>

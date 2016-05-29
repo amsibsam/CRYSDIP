@@ -40,6 +40,11 @@ public class IndustriViewModel extends BaseObservable {
     }
 
     @Bindable
+    public String getFavorite() {
+        return String.valueOf(industri.getCount());
+    }
+
+    @Bindable
     public View.OnClickListener getViewIndustriDetailClickListener(){
         return viewIndustriDetailClickListener;
     }

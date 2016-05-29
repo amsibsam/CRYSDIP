@@ -39,16 +39,15 @@ public class TestimoniActivity extends AppCompatActivity {
         CrysdipApplication.getComponent().inject(this);
 
         binding.setItemTestimoniLong(testimoniLongViewModel);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-        binding.recyclerView.setLayoutManager(linearLayoutManager);
 
         getTestimoniLong();
     }
 
     public static class TestimoniLongViewModel{
         public final ObservableList<TestimoniViewModel> items = new ObservableArrayList<>();
-        public final ItemView itemView = ItemView.of(BR.itemTestimoniLong, R.layout.item_testimoni_short);
+        public final ItemView itemView = ItemView.of(BR.itemListViewModel, R.layout.item_testimoni_long);
     }
+
 
     private void getTestimoniLong(){
         testimoniLongViewModel.items.clear();

@@ -3,21 +3,31 @@ package com.uny.crysdip.network;
 import android.content.Context;
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 import com.squareup.okhttp.HttpUrl;
 import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
 import com.squareup.okhttp.logging.HttpLoggingInterceptor;
 import com.uny.crysdip.pojo.IndustriDetail;
 import com.uny.crysdip.pojo.ListIndustri;
 import com.uny.crysdip.pojo.Mahasiswa;
 import com.uny.crysdip.pojo.Testimoni;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -32,6 +42,7 @@ import retrofit.http.GET;
 import retrofit.http.POST;
 import retrofit.http.Query;
 import rx.Observable;
+import rx.Subscriber;
 import rx.functions.Func1;
 
 /**
@@ -40,7 +51,7 @@ import rx.functions.Func1;
 public class CrysdipService {
     private interface CrysdipApi {
         @GET("industri/list")
-        Observable<ListIndustriResponse> getListIndustri();
+        Observable<ListIndustriElementResponse> getListIndustri();
 
         @GET("industri/detail")
         Observable<IndustriDetailResponse> getIndustriDetail(@Query("industri_id") int industriId,
@@ -55,32 +66,32 @@ public class CrysdipService {
         @GET("industri/testimoni")
         Observable<TestimoniListResponse> getTestimoniLong(@Query("industri_id") int industriId);
 
-        @FormUrlEncoded
-        @POST("industri/cari")
-        Observable<ListIndustriResponse> getRecomendation(@Field("nama_kategori[]") String namaKategori1,
-                                                          @Field("nama_kategori[]") String namaKategori2,
-                                                          @Field("nama_kategori[]") String namaKategori3,
-                                                          @Field("nama_kategori[]") String namaKategori4,
-                                                          @Field("nama_kategori[]") String namaKategori5,
-                                                          @Field("spesifikasi[]") String spesifikasi1,
-                                                          @Field("spesifikasi[]") String spesifikasi2,
-                                                          @Field("spesifikasi[]") String spesifikasi3,
-                                                          @Field("spesifikasi[]") String spesifikasi4,
-                                                          @Field("spesifikasi[]") String spesifikasi5,
-                                                          @Field("spesifikasi[]") String spesifikasi6,
-                                                          @Field("spesifikasi[]") String spesifikasi7,
-                                                          @Field("spesifikasi[]") String spesifikasi8,
-                                                          @Field("spesifikasi[]") String spesifikasi9);
+
+        @GET("industri/cari")
+        Observable<ListIndustriResponse> getRecomendation(@Query("nama_kategori[]") String namaKategori1,
+                                                          @Query("nama_kategori[]") String namaKategori2,
+                                                          @Query("nama_kategori[]") String namaKategori3,
+                                                          @Query("nama_kategori[]") String namaKategori4,
+                                                          @Query("nama_kategori[]") String namaKategori5,
+                                                          @Query("spesifikasi[]") String spesifikasi1,
+                                                          @Query("spesifikasi[]") String spesifikasi2,
+                                                          @Query("spesifikasi[]") String spesifikasi3,
+                                                          @Query("spesifikasi[]") String spesifikasi4,
+                                                          @Query("spesifikasi[]") String spesifikasi5,
+                                                          @Query("spesifikasi[]") String spesifikasi6,
+                                                          @Query("spesifikasi[]") String spesifikasi7,
+                                                          @Query("spesifikasi[]") String spesifikasi8,
+                                                          @Query("spesifikasi[]") String spesifikasi9);
 
         @FormUrlEncoded
         @POST("mahasiswa/login")
         Observable<MahasiswaResponse> login(@Field("nim") String nim,
                                             @Field("password") String password);
 
-        @FormUrlEncoded
+
         @POST("industri/like")
-        Observable<FavoriteResponse> setFavorite(@Field("industri_id") int industriId,
-                                                 @Field("mahasiswa_id") int mahasiswaId);
+        Observable<FavoriteResponse> setFavorite(@Query("industri_id") int industriId,
+                                                 @Query("mahasiswa_id") int mahasiswaId);
 
         @FormUrlEncoded
         @POST("industri/unlike")
@@ -94,6 +105,8 @@ public class CrysdipService {
                                                     @Field("industri_id") int industriId);
     }
 
+    private static String BASE_URL = "http://172.20.10.3:8001/api/";
+
     private CrysdipApi crysdipApi;
 
     private Gson gson = new GsonBuilder()
@@ -105,8 +118,8 @@ public class CrysdipService {
         BaseUrl baseUrl = new BaseUrl() {
             @Override
             public HttpUrl url() {
-                final String baseUrl = "http://crysdip.herokuapp.com/api/";
-//                final String baseUrl = "http://192.168.1.25:8001/api/";
+//                final String baseUrl = "http://crysdip.herokuapp.com/api/";
+                final String baseUrl = BASE_URL;
                 return HttpUrl.parse(baseUrl);
             }
         };
@@ -183,19 +196,67 @@ public class CrysdipService {
 
     public Observable<ListIndustri> getListIndustri(){
         return crysdipApi.getListIndustri()
-                .flatMap(new Func1<ListIndustriResponse, Observable<ListIndustriResponse.Industri>>() {
+                .map(new Func1<ListIndustriElementResponse, ListIndustri>() {
                     @Override
-                    public Observable<ListIndustriResponse.Industri> call(ListIndustriResponse listIndustriResponse) {
-                        return Observable.from(listIndustriResponse.industris);
-                    }
-                })
-                .map(new Func1<ListIndustriResponse.Industri, ListIndustri>() {
-                    @Override
-                    public ListIndustri call(ListIndustriResponse.Industri industri) {
-                        return industri.toIndustriPojo();
+                    public ListIndustri call(ListIndustriElementResponse listIndustriElementResponse) {
+                        JsonObject listIndustri = listIndustriElementResponse.industris.getAsJsonObject();
+                        Log.d("amsibsam", "objek "+listIndustri.toString());
+                        return null;
                     }
                 });
     }
+
+    public Observable<List<ListIndustri>> getListIndustriManual(){
+        final OkHttpClient client = new OkHttpClient();
+        client.setConnectTimeout(60, TimeUnit.SECONDS);
+        client.setReadTimeout(60, TimeUnit.SECONDS);
+
+        return Observable.create(new Observable.OnSubscribe<List<ListIndustri>>() {
+            @Override
+            public void call(Subscriber<? super List<ListIndustri>> subscriber) {
+                Request request = new Request.Builder()
+                        .url(BASE_URL+"industri/list")
+                        .build();
+
+                try {
+                    com.squareup.okhttp.Response response = client.newCall(request).execute();
+                    String responseStr = response.body().string();
+                    List<ListIndustri> listIndustris = new ArrayList<ListIndustri>();
+                    Log.d("amsibsam", "responseStr listIndustri "+responseStr);
+                    JSONObject objResponse=new JSONObject(responseStr);
+                    JSONArray industris = objResponse.getJSONArray("industris");
+
+                    for (int i = 0;i<industris.length();i++){
+                        JSONObject data = industris.getJSONObject(i);
+                        int id = data.getInt("id");
+                        String namaIndustri = data.getString("nama_industri");
+                        String alamat = data.getString("alamat");
+                        String fotoUrl = data.getString("foto_url");
+
+                        try{
+                            JSONObject likeCounter = data.getJSONObject("like_counter");
+                            int count = likeCounter.getInt("count");
+                            ListIndustri listIndustri = new ListIndustri(id, namaIndustri, alamat, Uri.parse(fotoUrl), count);
+                            listIndustris.add(listIndustri);
+                        } catch (JSONException e){
+                            ListIndustri listIndustri = new ListIndustri(id, namaIndustri, alamat, Uri.parse(fotoUrl), 0);
+                            listIndustris.add(listIndustri);
+                        }
+                    }
+
+                    subscriber.onNext(listIndustris);
+                    subscriber.onCompleted();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    subscriber.onError(e);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+
 
     public Observable<IndustriDetail> getIndustriDetail(int industriId, int mahasiswaId){
         return crysdipApi.getIndustriDetail(industriId, mahasiswaId)
@@ -351,9 +412,16 @@ public class CrysdipService {
             String fotoUrl;
 
             ListIndustri toIndustriPojo(){
-                return new ListIndustri(id, namaIndustri, alamat, Uri.parse(fotoUrl));
+                return new ListIndustri(id, namaIndustri, alamat, Uri.parse(fotoUrl), 0);
             }
         }
+    }
+
+    private class ListIndustriElementResponse{
+        String status;
+        JsonElement industris;
+
+
     }
 
     /*

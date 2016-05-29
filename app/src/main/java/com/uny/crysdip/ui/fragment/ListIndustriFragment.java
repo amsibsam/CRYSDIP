@@ -25,6 +25,9 @@ import com.uny.crysdip.ui.activity.IndustryActivity;
 import com.uny.crysdip.ui.util.DrawableManager;
 import com.uny.crysdip.viewmodel.IndustriViewModel;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -104,37 +107,77 @@ public class ListIndustriFragment extends android.support.v4.app.Fragment {
         binding.pbLoading.setVisibility(View.VISIBLE);
         binding.recyclerView.setVisibility(View.GONE);
         industriListViewModel.items.clear();
-        crysdipService.getListIndustri()
-                .observeOn(AndroidSchedulers.mainThread())
+//        crysdipService.getListIndustri()
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribeOn(Schedulers.io())
+//                .subscribe(new Subscriber<ListIndustri>() {
+//                               @Override
+//                               public void onCompleted() {
+//
+//                               }
+//
+//                               @Override
+//                               public void onError(Throwable e) {
+//                                   Log.e("amsibsam", "error get industri " + e.toString());
+//                                   binding.pbLoading.setVisibility(View.GONE);
+//                                   Toast.makeText(getActivity(), "Koneksi Bermasalah", Toast.LENGTH_SHORT).show();
+//                               }
+//
+//                               @Override
+//                               public void onNext(final ListIndustri listIndustri) {
+//                                   binding.pbLoading.setVisibility(View.GONE);
+//                                   binding.recyclerView.setVisibility(View.VISIBLE);
+//                                   industriListViewModel.items.add(new IndustriViewModel(listIndustri,
+//                                           new View.OnClickListener() {
+//                                               @Override
+//                                               public void onClick(View v) {
+//                                                   startActivity(new Intent(getActivity(), IndustryActivity.class)
+//                                                           .putExtra(INDUSTRI_ID, listIndustri.getId()));
+//                                               }
+//                                           }));
+//                               }
+//                           }
+//                );
+
+        crysdipService.getListIndustriManual()
                 .subscribeOn(Schedulers.io())
-                .subscribe(new Subscriber<ListIndustri>() {
-                               @Override
-                               public void onCompleted() {
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<List<ListIndustri>>() {
+                    @Override
+                    public void onCompleted() {
 
-                               }
+                    }
 
-                               @Override
-                               public void onError(Throwable e) {
-                                   Log.e("amsibsam", "error get industri " + e.toString());
-                                   binding.pbLoading.setVisibility(View.GONE);
-                                   Toast.makeText(getActivity(), "Koneksi Bermasalah", Toast.LENGTH_SHORT).show();
-                               }
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.e("amsibsam", "error get list industri "+e.getMessage());
+                    }
 
-                               @Override
-                               public void onNext(final ListIndustri listIndustri) {
-                                   binding.pbLoading.setVisibility(View.GONE);
-                                   binding.recyclerView.setVisibility(View.VISIBLE);
-                                   industriListViewModel.items.add(new IndustriViewModel(listIndustri,
-                                           new View.OnClickListener() {
-                                               @Override
-                                               public void onClick(View v) {
-                                                   startActivity(new Intent(getActivity(), IndustryActivity.class)
-                                                           .putExtra(INDUSTRI_ID, listIndustri.getId()));
-                                               }
-                                           }));
-                               }
-                           }
-                );
+                    @Override
+                    public void onNext(List<ListIndustri> listIndustris) {
+                        binding.pbLoading.setVisibility(View.GONE);
+                        binding.recyclerView.setVisibility(View.VISIBLE);
+                        Collections.sort(listIndustris, new Comparator<ListIndustri>() {
+                            @Override
+                            public int compare(ListIndustri lhs, ListIndustri rhs) {
+                                return lhs.compareTo(rhs);
+                            }
+                        });
+
+                        for (final ListIndustri listIndustri : listIndustris){
+                            industriListViewModel.items.add(new IndustriViewModel(listIndustri,
+                                    new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            startActivity(new Intent(getActivity(), IndustryActivity.class)
+                                                    .putExtra(INDUSTRI_ID, listIndustri.getId()));
+                                        }
+                                    }));
+
+                        }
+
+                    }
+                });
 
     }
 
