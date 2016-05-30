@@ -51,7 +51,7 @@ import rx.functions.Func1;
 public class CrysdipService {
     private interface CrysdipApi {
         @GET("industri/list")
-        Observable<ListIndustriElementResponse> getListIndustri();
+        Observable<ListIndustriResponse> getListIndustri();
 
         @GET("industri/detail")
         Observable<IndustriDetailResponse> getIndustriDetail(@Query("industri_id") int industriId,
@@ -68,7 +68,7 @@ public class CrysdipService {
 
 
         @GET("industri/cari")
-        Observable<ListIndustriResponse> getRecomendation(@Query("nama_kategori[]") String namaKategori1,
+        Observable<ListRecomendedIndustriResponse> getRecomendation(@Query("nama_kategori[]") String namaKategori1,
                                                           @Query("nama_kategori[]") String namaKategori2,
                                                           @Query("nama_kategori[]") String namaKategori3,
                                                           @Query("nama_kategori[]") String namaKategori4,
@@ -105,7 +105,7 @@ public class CrysdipService {
                                                     @Field("industri_id") int industriId);
     }
 
-    private static String BASE_URL = "http://172.20.10.3:8001/api/";
+    private static String BASE_URL = "http://192.168.1.122:8001/api/";
 
     private CrysdipApi crysdipApi;
 
@@ -196,12 +196,16 @@ public class CrysdipService {
 
     public Observable<ListIndustri> getListIndustri(){
         return crysdipApi.getListIndustri()
-                .map(new Func1<ListIndustriElementResponse, ListIndustri>() {
+                .flatMap(new Func1<ListIndustriResponse, Observable<ListIndustriResponse.Industri>>() {
                     @Override
-                    public ListIndustri call(ListIndustriElementResponse listIndustriElementResponse) {
-                        JsonObject listIndustri = listIndustriElementResponse.industris.getAsJsonObject();
-                        Log.d("amsibsam", "objek "+listIndustri.toString());
-                        return null;
+                    public Observable<ListIndustriResponse.Industri> call(ListIndustriResponse listIndustriResponse) {
+                        return Observable.from(listIndustriResponse.industris);
+                    }
+                })
+                .map(new Func1<ListIndustriResponse.Industri, ListIndustri>() {
+                    @Override
+                    public ListIndustri call(ListIndustriResponse.Industri industri) {
+                        return industri.toIndustriPojo();
                     }
                 });
     }
@@ -334,15 +338,15 @@ public class CrysdipService {
                                                      String spesifikasi9){
         return crysdipApi.getRecomendation(kategori1, kategori2, kategori3, kategori4, kategori5,
                 spesifikasi1, spesifikasi2, spesifikasi3, spesifikasi4, spesifikasi5, spesifikasi6, spesifikasi7, spesifikasi8, spesifikasi9)
-                .flatMap(new Func1<ListIndustriResponse, Observable<ListIndustriResponse.Industri>>() {
+                .flatMap(new Func1<ListRecomendedIndustriResponse, Observable<ListRecomendedIndustriResponse.Industri>>() {
                     @Override
-                    public Observable<ListIndustriResponse.Industri> call(ListIndustriResponse listIndustriResponse) {
+                    public Observable<ListRecomendedIndustriResponse.Industri> call(ListRecomendedIndustriResponse listIndustriResponse) {
                         return Observable.from(listIndustriResponse.industris);
                     }
                 })
-                .map(new Func1<ListIndustriResponse.Industri, ListIndustri>() {
+                .map(new Func1<ListRecomendedIndustriResponse.Industri, ListIndustri>() {
                     @Override
-                    public ListIndustri call(ListIndustriResponse.Industri industri) {
+                    public ListIndustri call(ListRecomendedIndustriResponse.Industri industri) {
                         return industri.toIndustriPojo();
                     }
                 });
@@ -410,9 +414,30 @@ public class CrysdipService {
             String namaIndustri;
             String alamat;
             String fotoUrl;
+            LikeCounter likeCounter;
+
+            class LikeCounter{
+                int count;
+            }
 
             ListIndustri toIndustriPojo(){
-                return new ListIndustri(id, namaIndustri, alamat, Uri.parse(fotoUrl), 0);
+                return new ListIndustri(id, namaIndustri, alamat, Uri.parse(fotoUrl), likeCounter == null ? 0: likeCounter.count );
+            }
+        }
+    }
+
+    private class ListRecomendedIndustriResponse{
+        String status;
+        List<Industri> industris;
+
+        class Industri{
+            int id;
+            String namaIndustri;
+            String alamat;
+            String fotoUrl;
+            String count;
+            ListIndustri toIndustriPojo(){
+                return new ListIndustri(id, namaIndustri, alamat, Uri.parse(fotoUrl), count == null ? 0: Integer.parseInt(count));
             }
         }
     }

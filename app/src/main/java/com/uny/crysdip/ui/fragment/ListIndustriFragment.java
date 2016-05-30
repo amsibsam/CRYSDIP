@@ -107,41 +107,10 @@ public class ListIndustriFragment extends android.support.v4.app.Fragment {
         binding.pbLoading.setVisibility(View.VISIBLE);
         binding.recyclerView.setVisibility(View.GONE);
         industriListViewModel.items.clear();
-//        crysdipService.getListIndustri()
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribeOn(Schedulers.io())
-//                .subscribe(new Subscriber<ListIndustri>() {
-//                               @Override
-//                               public void onCompleted() {
-//
-//                               }
-//
-//                               @Override
-//                               public void onError(Throwable e) {
-//                                   Log.e("amsibsam", "error get industri " + e.toString());
-//                                   binding.pbLoading.setVisibility(View.GONE);
-//                                   Toast.makeText(getActivity(), "Koneksi Bermasalah", Toast.LENGTH_SHORT).show();
-//                               }
-//
-//                               @Override
-//                               public void onNext(final ListIndustri listIndustri) {
-//                                   binding.pbLoading.setVisibility(View.GONE);
-//                                   binding.recyclerView.setVisibility(View.VISIBLE);
-//                                   industriListViewModel.items.add(new IndustriViewModel(listIndustri,
-//                                           new View.OnClickListener() {
-//                                               @Override
-//                                               public void onClick(View v) {
-//                                                   startActivity(new Intent(getActivity(), IndustryActivity.class)
-//                                                           .putExtra(INDUSTRI_ID, listIndustri.getId()));
-//                                               }
-//                                           }));
-//                               }
-//                           }
-//                );
-
-        crysdipService.getListIndustriManual()
-                .subscribeOn(Schedulers.io())
+        crysdipService.getListIndustri()
                 .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .toList()
                 .subscribe(new Subscriber<List<ListIndustri>>() {
                     @Override
                     public void onCompleted() {
@@ -150,7 +119,9 @@ public class ListIndustriFragment extends android.support.v4.app.Fragment {
 
                     @Override
                     public void onError(Throwable e) {
-                        Log.e("amsibsam", "error get list industri "+e.getMessage());
+                        Log.e("amsibsam", "error get industri " + e.toString());
+                        binding.pbLoading.setVisibility(View.GONE);
+                        Toast.makeText(getActivity(), "Koneksi Bermasalah", Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
@@ -175,10 +146,8 @@ public class ListIndustriFragment extends android.support.v4.app.Fragment {
                                     }));
 
                         }
-
                     }
                 });
-
     }
 
 }

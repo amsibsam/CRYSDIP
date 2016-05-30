@@ -42,6 +42,7 @@ public interface CrysdipComponent {
     void inject(RecomendationListActivity recomendationListActivity);
     void inject(TestimoniActivity testimoniActivity);
 
+
     final class Initializer {
         public static CrysdipComponent init(Application application) {
             return DaggerCrysdipComponent.builder()
