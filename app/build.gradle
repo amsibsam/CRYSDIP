@@ -48,7 +48,6 @@ dependencies {
     compile 'me.tatarka:bindingcollectionadapter:0.14'
     compile 'me.tatarka:bindingcollectionadapter-recyclerview:0.14'
     compile 'org.greenrobot:eventbus:3.0.0'
-    compile 'com.jakewharton:butterknife:7.0.1'
     compile 'com.android.support:support-v4:23.2.1'
     compile 'com.github.paolorotolo:appintro:3.4.0'
     compile 'com.google.android.gms:play-services:8.4.0'
@@ -59,4 +58,6 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.5.2'
     //recycler animation
     compile 'jp.wasabeef:recyclerview-animators:2.2.3'
+    //realm db
+    compile 'io.realm:realm-android:0.84.1'
 }

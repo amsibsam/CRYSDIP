@@ -1,9 +1,11 @@
 package com.uny.crysdip.ui.fragment;
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.databinding.ObservableArrayList;
 import android.databinding.ObservableList;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -17,6 +19,7 @@ import android.widget.Toast;
 
 import com.uny.crysdip.BR;
 import com.uny.crysdip.CrysdipApplication;
+import com.uny.crysdip.db.RealmDb;
 import com.uny.crysdip.pojo.ListIndustri;
 import com.uny.crysdip.R;
 import com.uny.crysdip.databinding.FragmentListIndustriBinding;
@@ -32,6 +35,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import io.realm.RealmResults;
 import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator;
 import jp.wasabeef.recyclerview.animators.SlideInUpAnimator;
 import me.tatarka.bindingcollectionadapter.ItemView;
@@ -51,6 +55,9 @@ public class ListIndustriFragment extends android.support.v4.app.Fragment {
 
     @Inject
     CrysdipService crysdipService;
+
+    @Inject
+    RealmDb realmDb;
 
     public static ListIndustriFragment newInstance(int page, String title) {
         ListIndustriFragment listIndustriFragment = new ListIndustriFragment();
@@ -107,47 +114,62 @@ public class ListIndustriFragment extends android.support.v4.app.Fragment {
         binding.pbLoading.setVisibility(View.VISIBLE);
         binding.recyclerView.setVisibility(View.GONE);
         industriListViewModel.items.clear();
-        crysdipService.getListIndustri()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .toList()
-                .subscribe(new Subscriber<List<ListIndustri>>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Log.e("amsibsam", "error get industri " + e.toString());
-                        binding.pbLoading.setVisibility(View.GONE);
-                        Toast.makeText(getActivity(), "Koneksi Bermasalah", Toast.LENGTH_SHORT).show();
-                    }
-
-                    @Override
-                    public void onNext(List<ListIndustri> listIndustris) {
-                        binding.pbLoading.setVisibility(View.GONE);
-                        binding.recyclerView.setVisibility(View.VISIBLE);
-                        Collections.sort(listIndustris, new Comparator<ListIndustri>() {
-                            @Override
-                            public int compare(ListIndustri lhs, ListIndustri rhs) {
-                                return lhs.compareTo(rhs);
-                            }
-                        });
-
-                        for (final ListIndustri listIndustri : listIndustris){
-                            industriListViewModel.items.add(new IndustriViewModel(listIndustri,
-                                    new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View v) {
-                                            startActivity(new Intent(getActivity(), IndustryActivity.class)
-                                                    .putExtra(INDUSTRI_ID, listIndustri.getId()));
-                                        }
-                                    }));
+        if (isNetworkConnected()){
+            Log.d("amsibsam", "online");
+            crysdipService.getListIndustri()
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .toList()
+                    .subscribe(new Subscriber<List<ListIndustri>>() {
+                        @Override
+                        public void onCompleted() {
 
                         }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            Log.e("amsibsam", "error get industri " + e.toString());
+                            binding.pbLoading.setVisibility(View.GONE);
+                            Toast.makeText(getActivity(), "Koneksi Bermasalah", Toast.LENGTH_SHORT).show();
+                        }
+
+                        @Override
+                        public void onNext(List<ListIndustri> listIndustris) {
+                            binding.pbLoading.setVisibility(View.GONE);
+                            binding.recyclerView.setVisibility(View.VISIBLE);
+                            for (final ListIndustri listIndustri : listIndustris){
+                                realmDb.add(listIndustri);
+                                industriListViewModel.items.add(new IndustriViewModel(listIndustri,
+                                        new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+                                                startActivity(new Intent(getActivity(), IndustryActivity.class)
+                                                        .putExtra(INDUSTRI_ID, listIndustri.getId()));
+                                            }
+                                        }));
+                            }
+                        }
+                    });
+        } else {
+            binding.pbLoading.setVisibility(View.GONE);
+            binding.recyclerView.setVisibility(View.VISIBLE);
+            List<ListIndustri> listIndustris = realmDb.getListIndustriFromDb();
+            for (ListIndustri listIndustri : listIndustris){
+                Log.d("amsibsam", "industri offline "+listIndustri.getNamaIndustri());
+                industriListViewModel.items.add(new IndustriViewModel(listIndustri, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(getActivity(), "Anda Offline", Toast.LENGTH_SHORT).show();
                     }
-                });
+                }));
+            }
+        }
+    }
+
+    private boolean isNetworkConnected() {
+        ConnectivityManager cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        return cm.getActiveNetworkInfo() != null;
     }
 
 }

@@ -105,7 +105,6 @@ public class CrysdipService {
                                                     @Field("industri_id") int industriId);
     }
 
-    private static String BASE_URL = "http://192.168.1.122:8001/api/";
 
     private CrysdipApi crysdipApi;
 
@@ -119,7 +118,7 @@ public class CrysdipService {
             @Override
             public HttpUrl url() {
 //                final String baseUrl = "http://crysdip.herokuapp.com/api/";
-                final String baseUrl = BASE_URL;
+                final String baseUrl = "http://192.168.1.111:8001/api/";
                 return HttpUrl.parse(baseUrl);
             }
         };
@@ -208,56 +207,6 @@ public class CrysdipService {
                         return industri.toIndustriPojo();
                     }
                 });
-    }
-
-    public Observable<List<ListIndustri>> getListIndustriManual(){
-        final OkHttpClient client = new OkHttpClient();
-        client.setConnectTimeout(60, TimeUnit.SECONDS);
-        client.setReadTimeout(60, TimeUnit.SECONDS);
-
-        return Observable.create(new Observable.OnSubscribe<List<ListIndustri>>() {
-            @Override
-            public void call(Subscriber<? super List<ListIndustri>> subscriber) {
-                Request request = new Request.Builder()
-                        .url(BASE_URL+"industri/list")
-                        .build();
-
-                try {
-                    com.squareup.okhttp.Response response = client.newCall(request).execute();
-                    String responseStr = response.body().string();
-                    List<ListIndustri> listIndustris = new ArrayList<ListIndustri>();
-                    Log.d("amsibsam", "responseStr listIndustri "+responseStr);
-                    JSONObject objResponse=new JSONObject(responseStr);
-                    JSONArray industris = objResponse.getJSONArray("industris");
-
-                    for (int i = 0;i<industris.length();i++){
-                        JSONObject data = industris.getJSONObject(i);
-                        int id = data.getInt("id");
-                        String namaIndustri = data.getString("nama_industri");
-                        String alamat = data.getString("alamat");
-                        String fotoUrl = data.getString("foto_url");
-
-                        try{
-                            JSONObject likeCounter = data.getJSONObject("like_counter");
-                            int count = likeCounter.getInt("count");
-                            ListIndustri listIndustri = new ListIndustri(id, namaIndustri, alamat, Uri.parse(fotoUrl), count);
-                            listIndustris.add(listIndustri);
-                        } catch (JSONException e){
-                            ListIndustri listIndustri = new ListIndustri(id, namaIndustri, alamat, Uri.parse(fotoUrl), 0);
-                            listIndustris.add(listIndustri);
-                        }
-                    }
-
-                    subscriber.onNext(listIndustris);
-                    subscriber.onCompleted();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    subscriber.onError(e);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
     }
 
 
@@ -414,14 +363,10 @@ public class CrysdipService {
             String namaIndustri;
             String alamat;
             String fotoUrl;
-            LikeCounter likeCounter;
-
-            class LikeCounter{
-                int count;
-            }
+            String count;
 
             ListIndustri toIndustriPojo(){
-                return new ListIndustri(id, namaIndustri, alamat, Uri.parse(fotoUrl), likeCounter == null ? 0: likeCounter.count );
+                return new ListIndustri(id, namaIndustri, alamat, fotoUrl, count == null ? 0: Integer.parseInt(count));
             }
         }
     }
@@ -437,7 +382,7 @@ public class CrysdipService {
             String fotoUrl;
             String count;
             ListIndustri toIndustriPojo(){
-                return new ListIndustri(id, namaIndustri, alamat, Uri.parse(fotoUrl), count == null ? 0: Integer.parseInt(count));
+                return new ListIndustri(id, namaIndustri, alamat, fotoUrl, count == null ? 0: Integer.parseInt(count));
             }
         }
     }

@@ -36,7 +36,7 @@ public class IndustriViewModel extends BaseObservable {
 
     @Bindable
     public Uri getFoto(){
-        return industri.getFotoUrl();
+        return Uri.parse(industri.getFotoUrl());
     }
 
     @Bindable
