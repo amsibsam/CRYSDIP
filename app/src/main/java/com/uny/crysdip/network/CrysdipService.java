@@ -117,8 +117,8 @@ public class CrysdipService {
         BaseUrl baseUrl = new BaseUrl() {
             @Override
             public HttpUrl url() {
-//                final String baseUrl = "http://crysdip.herokuapp.com/api/";
-                final String baseUrl = "http://192.168.1.111:8001/api/";
+                final String baseUrl = "http://crysdip.herokuapp.com/api/";
+//                final String baseUrl = "http://192.168.1.111:8001/api/";
                 return HttpUrl.parse(baseUrl);
             }
         };
