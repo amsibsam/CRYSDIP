@@ -33,6 +33,7 @@ import com.uny.crysdip.pojo.IndustriDetail;
 import com.uny.crysdip.R;
 import com.uny.crysdip.databinding.ActivityIndustryBinding;
 import com.uny.crysdip.network.CrysdipService;
+import com.uny.crysdip.pojo.IndustriKategoriDetail;
 import com.uny.crysdip.pojo.Testimoni;
 import com.uny.crysdip.viewmodel.TestimoniViewModel;
 
@@ -298,6 +299,29 @@ public class IndustryActivity extends FragmentActivity implements OnMapReadyCall
 
                         Log.d("amsibsam", "onNext");
 
+                    }
+                });
+
+        crysdipService.getKategori(industriId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .toList()
+                .subscribe(new Subscriber<List<IndustriKategoriDetail>>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(List<IndustriKategoriDetail> industriKategoriDetails) {
+                        for (int i=0; i<industriKategoriDetails.size();i++){
+
+                        }
                     }
                 });
     }

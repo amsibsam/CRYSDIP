@@ -18,6 +18,7 @@ import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.logging.HttpLoggingInterceptor;
 import com.uny.crysdip.pojo.IndustriDetail;
+import com.uny.crysdip.pojo.IndustriKategoriDetail;
 import com.uny.crysdip.pojo.ListIndustri;
 import com.uny.crysdip.pojo.Mahasiswa;
 import com.uny.crysdip.pojo.Testimoni;
@@ -56,6 +57,9 @@ public class CrysdipService {
         @GET("industri/detail")
         Observable<IndustriDetailResponse> getIndustriDetail(@Query("industri_id") int industriId,
                                                              @Query("mahasiswa_id") int mahasiswaId);
+
+        @GET("industri/kategori-detail")
+        Observable<IndustriKategoriDetailResponse> getIndustriKategoriDetail(@Query("industri_id") int industriId);
 
         @GET("industri/favorite")
         Observable<ListIndustriResponse> getFavoritedIndustri(@Query("mahasiswa_id") int mahasiswaId);
@@ -217,6 +221,16 @@ public class CrysdipService {
                     @Override
                     public IndustriDetail call(IndustriDetailResponse industriDetailResponse) {
                         return industriDetailResponse.industri.toIndustriDetailPojo(industriDetailResponse.liked);
+                    }
+                });
+    }
+
+    public Observable<IndustriKategoriDetail> getKategori(final int industriId){
+        return crysdipApi.getIndustriKategoriDetail(industriId)
+                .map(new Func1<IndustriKategoriDetailResponse, IndustriKategoriDetail>() {
+                    @Override
+                    public IndustriKategoriDetail call(IndustriKategoriDetailResponse industriKategoriDetailResponse) {
+                        return industriKategoriDetailResponse.toIndustriKategoriDetailPojo();
                     }
                 });
     }
@@ -427,8 +441,14 @@ public class CrysdipService {
                 return new IndustriDetail(namaIndustri, deskripsi, alamat, Double.parseDouble(lat), Double.parseDouble(lng), jumlahKaryawan, fotoUrl, favorite);
             }
         }
+    }
 
+    private class IndustriKategoriDetailResponse{
+        String namaKategori;
 
+        IndustriKategoriDetail toIndustriKategoriDetailPojo(){
+            return new IndustriKategoriDetail(namaKategori);
+        }
     }
 
     /*
