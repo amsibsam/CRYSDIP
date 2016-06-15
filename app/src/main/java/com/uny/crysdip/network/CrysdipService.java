@@ -227,10 +227,16 @@ public class CrysdipService {
 
     public Observable<IndustriKategoriDetail> getKategori(final int industriId){
         return crysdipApi.getIndustriKategoriDetail(industriId)
-                .map(new Func1<IndustriKategoriDetailResponse, IndustriKategoriDetail>() {
+                .flatMap(new Func1<IndustriKategoriDetailResponse, Observable<IndustriKategoriDetailResponse.Kategori>>() {
                     @Override
-                    public IndustriKategoriDetail call(IndustriKategoriDetailResponse industriKategoriDetailResponse) {
-                        return industriKategoriDetailResponse.toIndustriKategoriDetailPojo();
+                    public Observable<IndustriKategoriDetailResponse.Kategori> call(IndustriKategoriDetailResponse industriKategoriDetailResponse) {
+                        return Observable.from(industriKategoriDetailResponse.kategoris);
+                    }
+                })
+                .map(new Func1<IndustriKategoriDetailResponse.Kategori, IndustriKategoriDetail>() {
+                    @Override
+                    public IndustriKategoriDetail call(IndustriKategoriDetailResponse.Kategori kategori) {
+                        return kategori.toIndustriKategoriDetailPojo();
                     }
                 });
     }
@@ -444,11 +450,16 @@ public class CrysdipService {
     }
 
     private class IndustriKategoriDetailResponse{
-        String namaKategori;
+        List<Kategori> kategoris;
 
-        IndustriKategoriDetail toIndustriKategoriDetailPojo(){
-            return new IndustriKategoriDetail(namaKategori);
+        class Kategori{
+            String namaKategori;
+            IndustriKategoriDetail toIndustriKategoriDetailPojo(){
+                return new IndustriKategoriDetail(namaKategori);
+            }
         }
+
+
     }
 
     /*

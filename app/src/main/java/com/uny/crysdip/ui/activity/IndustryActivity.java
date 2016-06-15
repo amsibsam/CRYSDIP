@@ -319,9 +319,17 @@ public class IndustryActivity extends FragmentActivity implements OnMapReadyCall
 
                     @Override
                     public void onNext(List<IndustriKategoriDetail> industriKategoriDetails) {
+                        String kategori = "";
+                        Log.d("amsibsam", "size "+industriKategoriDetails.size());
                         for (int i=0; i<industriKategoriDetails.size();i++){
-
+                            if (i == industriKategoriDetails.size() - 1){
+                                kategori = kategori+industriKategoriDetails.get(i).getNamaKategori();
+                            } else {
+                                kategori = kategori+industriKategoriDetails.get(i).getNamaKategori() + ", ";
+                            }
                         }
+                        Log.d("amsibsam", "kategori "+kategori);
+                        binding.tvSkill.setText(kategori);
                     }
                 });
     }
