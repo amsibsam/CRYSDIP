@@ -1,5 +1,6 @@
 package com.uny.crysdip.ui.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.databinding.ObservableArrayList;
@@ -23,6 +24,7 @@ import com.uny.crysdip.pojo.Spesifikasi;
 import com.uny.crysdip.viewmodel.IndustriViewModel;
 import com.uny.crysdip.viewmodel.RecommendIndustriViewModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -35,14 +37,24 @@ import rx.schedulers.Schedulers;
 
 public class RecomendationListActivity extends AppCompatActivity {
     private static final String INDUSTRI_ID = "industri_id";
+    private static final String SPESIFIKASI_KEY = "spesifikasi";
     private ActivityRecomendationListBinding binding;
     ItemRecomendationViewModel itemRecomendationViewModel = new ItemRecomendationViewModel();
+    List<ListIndustriForRecommendation> recommendedList = new ArrayList<>();
+    String[] spesifikasi;
 
     @Inject
     CrysdipService crysdipService;
 
     @Inject
     RealmDb realmDb;
+
+    public static Intent generateIntent(Context contexts, String[] spesifikasi) {
+        Intent intent = new Intent(contexts, RecomendationListActivity.class);
+        intent.putExtra(SPESIFIKASI_KEY, spesifikasi);
+
+        return intent;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,36 +66,45 @@ public class RecomendationListActivity extends AppCompatActivity {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         binding.recyclerView.setLayoutManager(linearLayoutManager);
 
+        spesifikasi = getIntent().getStringArrayExtra(SPESIFIKASI_KEY);
+
         getRecomendation();
         getRecommendationFromDB();
     }
 
-    private void getRecommendationFromDB(){
+    private void getRecommendationFromDB() {
         List<ListIndustriForRecommendation> listIndustriForRecommendations = realmDb.getListForRecommendation();
 
-        for (final ListIndustriForRecommendation singleItem : listIndustriForRecommendations){
-            Log.d("amsibsam", "nama Industri : "+singleItem.getNamaIndustri());
-            for (Spesifikasi spesifikasi : singleItem.getSpesifikasis()){
-                Log.d("amsibsam", "ini spesifikasinya " + spesifikasi.getSpec());
-            }
-
-            itemRecomendationViewModel.items.add(new RecommendIndustriViewModel(singleItem, new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    startActivity(new Intent(RecomendationListActivity.this, IndustryActivity.class)
-                            .putExtra(INDUSTRI_ID, singleItem.getId()));
+        for (final ListIndustriForRecommendation singleItem : listIndustriForRecommendations) {
+            for (String spesifikasiUser : spesifikasi) {
+                if (singleItem.getSpesifikasis().contains(spesifikasiUser)) {
+                    singleItem.setValue(singleItem.getValue() + 1);
+                    recommendedList.add(singleItem);
                 }
-            }));
+//            Log.d("amsibsam", "nama Industri : "+singleItem.getNamaIndustri());
+//            for (Spesifikasi spesifikasi : singleItem.getSpesifikasis()){
+//                Log.d("amsibsam", "ini spesifikasinya " + spesifikasi.getSpec());
+//            }
+//
+//            itemRecomendationViewModel.items.add(new RecommendIndustriViewModel(singleItem, new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    startActivity(new Intent(RecomendationListActivity.this, IndustryActivity.class)
+//                            .putExtra(INDUSTRI_ID, singleItem.getId()));
+//                }
+//            }));
+            }
         }
-    }
 
-    public static class ItemRecomendationViewModel{
-        public final ObservableList<RecommendIndustriViewModel> items = new ObservableArrayList();
-        public final ItemView itemView = ItemView.of(BR.itemViewModel, R.layout.item_industri);
+        }
 
-    }
+        public static class ItemRecomendationViewModel {
+            public final ObservableList<RecommendIndustriViewModel> items = new ObservableArrayList();
+            public final ItemView itemView = ItemView.of(BR.itemViewModel, R.layout.item_industri);
 
-    private void getRecomendation(){
+        }
+
+    private void getRecomendation() {
         String kategori1 = getIntent().getStringExtra("kategori1");
         String kategori2 = getIntent().getStringExtra("kategori2");
         String kategori3 = getIntent().getStringExtra("kategori3");
@@ -102,7 +123,7 @@ public class RecomendationListActivity extends AppCompatActivity {
 
         crysdipService.getRecomendation(kategori1, kategori2, kategori3, kategori4, kategori5,
                 spesifikasi1, spesifikasi2, spesifikasi3, spesifikasi4, spesifikasi5, spesifikasi6,
-                spesifikasi7,spesifikasi8,spesifikasi9)
+                spesifikasi7, spesifikasi8, spesifikasi9)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(new Subscriber<ListIndustri>() {
@@ -113,7 +134,7 @@ public class RecomendationListActivity extends AppCompatActivity {
 
                     @Override
                     public void onError(Throwable e) {
-                        Log.e("amsibsam", "error getfavorit "+e.toString());
+                        Log.e("amsibsam", "error getfavorit " + e.toString());
                     }
 
                     @Override
