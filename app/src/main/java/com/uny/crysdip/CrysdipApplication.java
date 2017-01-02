@@ -5,6 +5,7 @@ import android.content.Context;
 import android.support.multidex.MultiDex;
 import com.crashlytics.android.Crashlytics;
 import io.fabric.sdk.android.Fabric;
+import io.realm.Realm;
 
 /**
  * Created by rahardyan on 09/04/16.
@@ -20,7 +21,7 @@ public class CrysdipApplication extends Application {
 
         instance = this;
         component = CrysdipComponent.Initializer.init(this);
-
+        Realm.init(this);
 
     }
 

@@ -1,32 +1,33 @@
 package com.uny.crysdip.pojo;
 
-import java.util.List;
-
+import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
 /**
  * Created by rahardyan on 03/04/16.
  */
-public class ListIndustri extends RealmObject{
+public class ListIndustriForRecommendation extends RealmObject{
     @PrimaryKey
-    private  int id;
+    private int id;
     private String namaIndustri;
     private String alamat;
     private String fotoUrl;
     private int count;
-    private String tag;
+    private RealmList<Spesifikasi> spesifikasis;
 
-    public ListIndustri() {
+
+    public ListIndustriForRecommendation() {
     }
 
-    public ListIndustri(int id, String nama, String alamat, String foto_url, int count, String spesifikasi) {
+    public ListIndustriForRecommendation(int id, String nama, String alamat, String foto_url,
+                                         int count, RealmList<Spesifikasi> spesifikasis) {
         this.id = id;
         this.namaIndustri = nama;
         this.alamat = alamat;
         this.fotoUrl = foto_url;
         this.count = count;
-        this.tag = spesifikasi;
+        this.spesifikasis = spesifikasis;
     }
 
     public String getNamaIndustri() {
@@ -69,11 +70,11 @@ public class ListIndustri extends RealmObject{
         this.count = count;
     }
 
-    public String getTag() {
-        return tag;
+    public RealmList<Spesifikasi> getSpesifikasis() {
+        return spesifikasis;
     }
 
-    public void setTag(String tag) {
-        this.tag = tag;
+    public void setSpesifikasis(RealmList<Spesifikasi> spesifikasis) {
+        this.spesifikasis = spesifikasis;
     }
 }

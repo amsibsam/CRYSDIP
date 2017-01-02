@@ -14,7 +14,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.OvershootInterpolator;
 import android.widget.Toast;
 
 import com.uny.crysdip.BR;
@@ -24,25 +23,21 @@ import com.uny.crysdip.pojo.ListIndustri;
 import com.uny.crysdip.R;
 import com.uny.crysdip.databinding.FragmentListIndustriBinding;
 import com.uny.crysdip.network.CrysdipService;
+import com.uny.crysdip.pojo.ListIndustriForRecommendation;
+import com.uny.crysdip.pojo.Spesifikasi;
 import com.uny.crysdip.ui.activity.IndustryActivity;
-import com.uny.crysdip.ui.util.DrawableManager;
 import com.uny.crysdip.viewmodel.IndustriViewModel;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
-import io.realm.RealmResults;
+import io.realm.RealmList;
 import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator;
-import jp.wasabeef.recyclerview.animators.SlideInUpAnimator;
 import me.tatarka.bindingcollectionadapter.ItemView;
-import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
 /**
@@ -98,7 +93,7 @@ public class ListIndustriFragment extends android.support.v4.app.Fragment {
         public final ItemView itemView = ItemView.of(BR.itemViewModel, R.layout.item_industri);
     }
 
-    //////////////////METHOD SECTINO///////////////////////
+    //////////////////METHOD SECTION///////////////////////
     private void setUpRecyclerView() {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -138,6 +133,19 @@ public class ListIndustriFragment extends android.support.v4.app.Fragment {
                             binding.pbLoading.setVisibility(View.GONE);
                             binding.recyclerView.setVisibility(View.VISIBLE);
                             for (final ListIndustri listIndustri : listIndustris){
+                                Log.d("amsibsam", "industri" + listIndustri.getNamaIndustri());
+                                RealmList<Spesifikasi> spesifikasis = new RealmList<Spesifikasi>();
+                                for (String tag : listIndustri.getTag().split(", ")) {
+                                    Log.d("amsibsam", "spesifikasi " + tag);
+                                    Spesifikasi spesifikasi = new Spesifikasi();
+                                    spesifikasi.setSpec(tag);
+                                    spesifikasis.add(spesifikasi);
+                                }
+                                ListIndustriForRecommendation listIndustriForRecommendation = new ListIndustriForRecommendation(
+                                        listIndustri.getId(), listIndustri.getNamaIndustri(), listIndustri.getAlamat(),
+                                        listIndustri.getFotoUrl(), listIndustri.getCount(), spesifikasis
+                                );
+                                realmDb.add(listIndustriForRecommendation);
                                 realmDb.add(listIndustri);
                                 industriListViewModel.items.add(new IndustriViewModel(listIndustri,
                                         new View.OnClickListener() {

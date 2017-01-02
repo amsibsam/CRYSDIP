@@ -15,9 +15,13 @@ import com.android.databinding.library.baseAdapters.BR;
 import com.uny.crysdip.CrysdipApplication;
 import com.uny.crysdip.R;
 import com.uny.crysdip.databinding.ActivityRecomendationListBinding;
+import com.uny.crysdip.db.RealmDb;
 import com.uny.crysdip.network.CrysdipService;
 import com.uny.crysdip.pojo.ListIndustri;
+import com.uny.crysdip.pojo.ListIndustriForRecommendation;
+import com.uny.crysdip.pojo.Spesifikasi;
 import com.uny.crysdip.viewmodel.IndustriViewModel;
+import com.uny.crysdip.viewmodel.RecommendIndustriViewModel;
 
 import java.util.List;
 
@@ -37,6 +41,9 @@ public class RecomendationListActivity extends AppCompatActivity {
     @Inject
     CrysdipService crysdipService;
 
+    @Inject
+    RealmDb realmDb;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,10 +55,30 @@ public class RecomendationListActivity extends AppCompatActivity {
         binding.recyclerView.setLayoutManager(linearLayoutManager);
 
         getRecomendation();
+        getRecommendationFromDB();
+    }
+
+    private void getRecommendationFromDB(){
+        List<ListIndustriForRecommendation> listIndustriForRecommendations = realmDb.getListForRecommendation();
+
+        for (final ListIndustriForRecommendation singleItem : listIndustriForRecommendations){
+            Log.d("amsibsam", "nama Industri : "+singleItem.getNamaIndustri());
+            for (Spesifikasi spesifikasi : singleItem.getSpesifikasis()){
+                Log.d("amsibsam", "ini spesifikasinya " + spesifikasi.getSpec());
+            }
+
+            itemRecomendationViewModel.items.add(new RecommendIndustriViewModel(singleItem, new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(new Intent(RecomendationListActivity.this, IndustryActivity.class)
+                            .putExtra(INDUSTRI_ID, singleItem.getId()));
+                }
+            }));
+        }
     }
 
     public static class ItemRecomendationViewModel{
-        public final ObservableList<IndustriViewModel> items = new ObservableArrayList();
+        public final ObservableList<RecommendIndustriViewModel> items = new ObservableArrayList();
         public final ItemView itemView = ItemView.of(BR.itemViewModel, R.layout.item_industri);
 
     }
@@ -91,13 +118,7 @@ public class RecomendationListActivity extends AppCompatActivity {
 
                     @Override
                     public void onNext(final ListIndustri listIndustri) {
-                        itemRecomendationViewModel.items.add(new IndustriViewModel(listIndustri, new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                startActivity(new Intent(RecomendationListActivity.this, IndustryActivity.class)
-                                        .putExtra(INDUSTRI_ID, listIndustri.getId()));
-                            }
-                        }));
+
                     }
                 });
     }

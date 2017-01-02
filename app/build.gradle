@@ -16,6 +16,7 @@ repositories {
 
 apply plugin: 'com.android.databinding'
 apply plugin: 'com.neenbedankt.android-apt'
+apply plugin: 'realm-android'
 
 android {
     compileSdkVersion 23
@@ -74,7 +75,7 @@ dependencies {
     //recycler animation
     compile 'jp.wasabeef:recyclerview-animators:2.2.3'
     //realm db
-    compile 'io.realm:realm-android:0.84.1'
+//    compile 'io.realm:realm-android:0.84.1'
     compile('com.crashlytics.sdk.android:crashlytics:2.5.6@aar') {
         transitive = true;
     }

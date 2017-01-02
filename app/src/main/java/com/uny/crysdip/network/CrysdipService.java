@@ -137,7 +137,12 @@ public class CrysdipService {
         HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
             @Override
             public void log(String message) {
-                Log.d("retrofit", message);
+                try {
+                    JSONObject messageRaw = new JSONObject(message);
+                    Log.d("retrofit", messageRaw.toString(1));
+                } catch (JSONException e){
+                    Log.d("retrofit", message);
+                }
             }
         });
         loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
@@ -384,9 +389,11 @@ public class CrysdipService {
             String alamat;
             String fotoUrl;
             String count;
+            String spesifikasi;
 
             ListIndustri toIndustriPojo(){
-                return new ListIndustri(id, namaIndustri, alamat, fotoUrl, count == null ? 0: Integer.parseInt(count));
+                return new ListIndustri(id, namaIndustri, alamat, fotoUrl,
+                        count == null ? 0: Integer.parseInt(count), spesifikasi);
             }
         }
     }
@@ -402,7 +409,7 @@ public class CrysdipService {
             String fotoUrl;
             String count;
             ListIndustri toIndustriPojo(){
-                return new ListIndustri(id, namaIndustri, alamat, fotoUrl, count == null ? 0: Integer.parseInt(count));
+                return new ListIndustri(id, namaIndustri, alamat, fotoUrl, count == null ? 0: Integer.parseInt(count), "");
             }
         }
     }
