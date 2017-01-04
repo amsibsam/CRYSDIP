@@ -46,10 +46,13 @@
              You can define the keys for the debug and release targets in src/debug/ and src/release/. 
         -->
         <activity android:name=".ui.activity.RecomendationListActivity" />
-        <activity android:name=".ui.activity.TestimoniActivity"></activity>
+        <activity android:name=".ui.activity.TestimoniActivity" />
+
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="3ffb03f6f2cd6672ae7619c546748dd2ccb4f862" />
+
+        <activity android:name=".ui.activity.ChooseProdiActivity"></activity>
     </application>
 
 </manifest>

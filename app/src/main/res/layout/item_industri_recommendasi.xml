@@ -5,7 +5,7 @@
     <data>
         <variable
             name="itemViewModel"
-            type="com.uny.crysdip.viewmodel.IndustriViewModel"/>
+            type="com.uny.crysdip.viewmodel.RecommendIndustriViewModel"/>
     </data>
 <RelativeLayout
     android:id="@+id/item_industri_wrapper"

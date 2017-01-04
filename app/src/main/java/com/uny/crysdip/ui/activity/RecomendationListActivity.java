@@ -76,33 +76,40 @@ public class RecomendationListActivity extends AppCompatActivity {
         List<ListIndustriForRecommendation> listIndustriForRecommendations = realmDb.getListForRecommendation();
 
         for (final ListIndustriForRecommendation singleItem : listIndustriForRecommendations) {
+            Log.d("amsibsam", "all industri " + singleItem.getNamaIndustri() + " " + singleItem.getValue());
             for (String spesifikasiUser : spesifikasi) {
-                if (singleItem.getSpesifikasis().contains(spesifikasiUser)) {
-                    singleItem.setValue(singleItem.getValue() + 1);
-                    recommendedList.add(singleItem);
+                Log.d("amsibsam", "spesifikasi user :"+spesifikasiUser);
+                for (Spesifikasi spesifikasiIndustri : singleItem.getSpesifikasis()) {
+                    String spesifikasiIndustriString = spesifikasiIndustri.getSpec();
+                    if (spesifikasiUser.toLowerCase().equals(spesifikasiIndustriString.toLowerCase())) {
+                        Log.d("amsibsam", "industri yang masuk "+singleItem.getNamaIndustri());
+                        realmDb.getRealmDb().beginTransaction();
+                        singleItem.setValue(singleItem.getValue() + 1);
+                        realmDb.getRealmDb().copyToRealmOrUpdate(singleItem);
+                        realmDb.getRealmDb().commitTransaction();
+                    }
                 }
-//            Log.d("amsibsam", "nama Industri : "+singleItem.getNamaIndustri());
-//            for (Spesifikasi spesifikasi : singleItem.getSpesifikasis()){
-//                Log.d("amsibsam", "ini spesifikasinya " + spesifikasi.getSpec());
-//            }
-//
-//            itemRecomendationViewModel.items.add(new RecommendIndustriViewModel(singleItem, new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    startActivity(new Intent(RecomendationListActivity.this, IndustryActivity.class)
-//                            .putExtra(INDUSTRI_ID, singleItem.getId()));
-//                }
-//            }));
+            }
+
+            if (singleItem.getValue() > 0) {
+                Log.d("amsibsam", "recomended list "+singleItem.getNamaIndustri());
+                recommendedList.add(singleItem);
+                itemRecomendationViewModel.items.add(new RecommendIndustriViewModel(singleItem, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        startActivity(new Intent(RecomendationListActivity.this, IndustryActivity.class)
+                                .putExtra(INDUSTRI_ID, singleItem.getId()));
+                    }
+                }));
             }
         }
+    }
 
-        }
+    public static class ItemRecomendationViewModel {
+        public final ObservableList<RecommendIndustriViewModel> items = new ObservableArrayList();
+        public final ItemView itemView = ItemView.of(BR.itemViewModel, R.layout.item_industri_recommendasi);
 
-        public static class ItemRecomendationViewModel {
-            public final ObservableList<RecommendIndustriViewModel> items = new ObservableArrayList();
-            public final ItemView itemView = ItemView.of(BR.itemViewModel, R.layout.item_industri);
-
-        }
+    }
 
     private void getRecomendation() {
         String kategori1 = getIntent().getStringExtra("kategori1");

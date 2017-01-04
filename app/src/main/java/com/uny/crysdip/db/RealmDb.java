@@ -46,14 +46,15 @@ public class RealmDb {
         } catch (RealmException e){
             e.printStackTrace();
         }
-
         return listIndustris;
     }
+
+
 
     public List<ListIndustriForRecommendation> getListForRecommendation() {
         RealmResults<ListIndustriForRecommendation> listIndustriForRecommendations = null;
         try {
-            listIndustriForRecommendations = realmDb.where(ListIndustriForRecommendation.class).findAll();
+            listIndustriForRecommendations = realmDb.where(ListIndustriForRecommendation.class).findAllSorted("value", Sort.DESCENDING);
         } catch (RealmException e){
             e.printStackTrace();
         }

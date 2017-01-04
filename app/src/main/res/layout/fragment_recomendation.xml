@@ -25,7 +25,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:text="Kategori Industri"
+                        android:text="Program studi"
                         android:textColor="@android:color/darker_gray"
                         android:textSize="@dimen/btn_text_normal" />
 
@@ -34,49 +34,35 @@
                         android:layout_height="0.5dp"
                         android:layout_marginTop="6dp"
                         android:background="@android:color/darker_gray" />
-
-                    <LinearLayout
+                    <RadioGroup
+                        android:id="@+id/rg_prodi_cotainer"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="6dp"
-                        android:orientation="vertical">
-
-                        <CheckBox
-                            android:id="@+id/cb_networking"
-                            android:layout_width="wrap_content"
+                        android:orientation="horizontal">
+                        <RadioButton
+                            android:id="@+id/cb_informatika"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
                             android:layout_height="wrap_content"
-                            android:text="Networking" />
-
-                        <CheckBox
-                            android:id="@+id/cb_mobile_programming"
-                            android:layout_width="wrap_content"
+                            android:padding="10dp"
+                            android:gravity="center"
+                            android:text="Informatika" />
+                        <RadioButton
+                            android:padding="10dp"
+                            android:id="@+id/cb_elektronika"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:gravity="center"
                             android:layout_height="wrap_content"
-                            android:text="Mobile Programming" />
-
-                        <CheckBox
-                            android:id="@+id/cb_desktop_programming"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Desktop Programming" />
-
-                        <CheckBox
-                            android:id="@+id/cb_web_programming"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Web Programming" />
-
-                        <CheckBox
-                            android:id="@+id/cb_multimedia"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Multimedia" />
-                    </LinearLayout>
-
+                            android:text="Elektronika" />
+                    </RadioGroup>
                     <TextView
+                        android:id="@+id/tv_minat_bakat"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:text="Minat dan Keahlian"
+                        android:visibility="gone"
                         android:textColor="@android:color/darker_gray"
                         android:textSize="@dimen/btn_text_normal" />
 
@@ -87,9 +73,11 @@
                         android:background="@android:color/darker_gray" />
 
                     <LinearLayout
+                        android:id="@+id/informatika_container"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
+                        android:visibility="gone"
                         android:paddingLeft="6dp">
                         <LinearLayout
                             android:layout_width="wrap_content"
@@ -108,22 +96,16 @@
                                 android:text="Administrasi Jaringan" />
 
                             <CheckBox
-                                android:id="@+id/cb_android"
+                                android:id="@+id/cb_animasi"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Android " />
+                                android:text="Animasi" />
 
                             <CheckBox
-                                android:id="@+id/cb_windows_phone"
+                                android:id="@+id/cb_desain_grafis"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Windows Phone" />
-
-                            <CheckBox
-                                android:id="@+id/cb_backend"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Backend" />
+                                android:text="Desain grafis" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -131,30 +113,84 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="6dp"
                             android:orientation="vertical">
-
                             <CheckBox
-                                android:id="@+id/cb_administrasi_server"
+                                android:id="@+id/cb_film"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Administrasi Server" />
+                                android:text="Film" />
 
                             <CheckBox
-                                android:id="@+id/cb_desainer"
+                                android:id="@+id/cb_mobile_programming"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="UI/UX desainer" />
+                                android:text="Mobile Programming" />
 
                             <CheckBox
-                                android:id="@+id/cb_ios"
+                                android:id="@+id/cb_web_programming"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="IOS" />
+                                android:text="Web Programming" />
 
                             <CheckBox
-                                android:id="@+id/cb_frontend"
+                                android:id="@+id/cb_sistem_informasi"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Frontend Web" />
+                                android:text="Sistem Informasi" />
+                        </LinearLayout>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/cb_elektronika_container"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingLeft="6dp"
+                        android:visibility="gone">
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+                            <CheckBox
+                                android:id="@+id/cb_instalasi"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Instalasi" />
+
+                            <CheckBox
+                                android:id="@+id/cb_telekomunikasi"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Telekomunikasi" />
+
+                            <CheckBox
+                                android:id="@+id/cb_audio_video"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Adio Video" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="6dp"
+                            android:orientation="vertical">
+                            <CheckBox
+                                android:id="@+id/cb_analog"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Analog" />
+
+                            <CheckBox
+                                android:id="@+id/cb_technical_support"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Technical Support" />
+
+                            <CheckBox
+                                android:id="@+id/cb_elektronika_industri"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Elektronika Industri" />
                         </LinearLayout>
                     </LinearLayout>
                     <Button

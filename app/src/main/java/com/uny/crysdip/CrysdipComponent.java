@@ -15,6 +15,7 @@ import com.uny.crysdip.ui.activity.TestimoniActivity;
 import com.uny.crysdip.ui.fragment.FavoritFragment;
 import com.uny.crysdip.ui.fragment.Intro1stFragment;
 import com.uny.crysdip.ui.fragment.ListIndustriFragment;
+import com.uny.crysdip.ui.fragment.RecomendationFragment;
 
 import javax.inject.Singleton;
 
@@ -41,6 +42,7 @@ public interface CrysdipComponent {
     void inject(SplashScreenActivity splashScreenActivity);
     void inject(RecomendationListActivity recomendationListActivity);
     void inject(TestimoniActivity testimoniActivity);
+    void inject(RecomendationFragment recomendationFragment);
 
 
     final class Initializer {

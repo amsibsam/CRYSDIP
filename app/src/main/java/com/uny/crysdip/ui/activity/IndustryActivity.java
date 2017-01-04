@@ -17,6 +17,8 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.CompoundButton;
 import android.widget.Toast;
 
@@ -95,6 +97,11 @@ public class IndustryActivity extends FragmentActivity implements OnMapReadyCall
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 //if isChecked = true, then favorite this industri, if isChecked false then unfavorite this industri
                 setFavoriteOrUnFavorite(isChecked);
+                if (isChecked) {
+                    Animation zoomIn = AnimationUtils.loadAnimation(IndustryActivity.this, R.anim.zoom_in);
+                    zoomIn.setDuration(300);
+                    binding.checkboxFavorite.startAnimation(zoomIn);
+                }
             }
         });
 

@@ -1,7 +1,6 @@
 package com.uny.crysdip.ui.fragment;
 
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -9,35 +8,29 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
-import com.uny.crysdip.R;
+import com.uny.crysdip.CrysdipApplication;
 import com.uny.crysdip.databinding.FragmentRecomendationBinding;
+import com.uny.crysdip.db.RealmDb;
+import com.uny.crysdip.pojo.ListIndustriForRecommendation;
 import com.uny.crysdip.ui.activity.RecomendationListActivity;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.inject.Inject;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class RecomendationFragment extends android.support.v4.app.Fragment {
     private FragmentRecomendationBinding binding;
-    private String namaKategori1 = "-";
-    private String namaKategori2 = "-";
-    private String namaKategori3 = "-";
-    private String namaKategori4 = "-";
-    private String namaKategori5 = "-";
+    private List<String> spesifikasi = new ArrayList<>();
 
-    private String spesifikasi1 = "-";
-    private String spesifikasi2 = "-";
-    private String spesifikasi3 = "-";
-    private String spesifikasi4 = "-";
-    private String spesifikasi5 = "-";
-    private String spesifikasi6 = "-";
-    private String spesifikasi7 = "-";
-    private String spesifikasi8 = "-";
-    private String spesifikasi9 = "-";
-    private String spesifikasi10 = "-";
-    private String spesifikasi11 = "-";
-    private String spesifikasi12 = "-";
+    @Inject
+    RealmDb realmDb;
 
     public RecomendationFragment() {
         // Required empty public constructor
@@ -47,183 +40,34 @@ public class RecomendationFragment extends android.support.v4.app.Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        CrysdipApplication.getComponent().inject(this);
         binding = FragmentRecomendationBinding.inflate(inflater, container, false);
 
-        binding.cbNetworking.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+        binding.rgProdiCotainer.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked == true){
-                    namaKategori1 = "Networking";
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                RadioButton radioButton = (RadioButton) getActivity().findViewById(checkedId);
+                if (radioButton.getText().equals("Informatika")) {
+                    binding.tvMinatBakat.setVisibility(View.VISIBLE);
+                    binding.informatikaContainer.setVisibility(View.VISIBLE);
+                    binding.cbElektronikaContainer.setVisibility(View.GONE);
                 } else {
-                    namaKategori1 = "-";
+                    binding.tvMinatBakat.setVisibility(View.VISIBLE);
+                    binding.informatikaContainer.setVisibility(View.GONE);
+                    binding.cbElektronikaContainer.setVisibility(View.VISIBLE);
                 }
             }
         });
 
-
-        binding.cbMobileProgramming.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked == true){
-                    namaKategori2 = "Mobile Programming";
-                    Log.d("amsibsam", "kategori2 klik "+namaKategori2);
-                } else {
-                    namaKategori2 = "-";
-                }
-            }
-        });
-
-        binding.cbDesktopProgramming.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked == true){
-                    namaKategori3 = "Desktop Programming";
-                } else {
-                    namaKategori3 = "-";
-                }
-            }
-        });
-
-        binding.cbWebProgramming.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked == true){
-                    namaKategori4 = "Web Programming";
-                } else {
-                    namaKategori4 = "-";
-                }
-            }
-        });
-
-        binding.cbMultimedia.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked == true){
-                    namaKategori5 = "Multimedia";
-                } else {
-                    namaKategori5 = "-";
-                }
-            }
-        });
-
-        binding.cbInstalasiJaringan.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked == true){
-                    spesifikasi1 = "Instalasi Jaringan";
-                } else {
-                    spesifikasi1 = "-";
-                }
-            }
-        });
-
-        binding.cbAdministrasiJaringan.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked == true){
-                    spesifikasi2 = "administrasi jaringan";
-                } else {
-                    spesifikasi2 = "-";
-                }
-            }
-        });
-
-        binding.cbAndroid.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked == true){
-                    spesifikasi3 = "android";
-                } else {
-                    spesifikasi3 = "-";
-                }
-            }
-        });
-
-        binding.cbWindowsPhone.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked == true){
-                    spesifikasi4 = "windows phone";
-                } else {
-                    spesifikasi4 = "-";
-                }
-            }
-        });
-
-        binding.cbBackend.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked == true){
-                    spesifikasi5 = "backend";
-                } else {
-                    spesifikasi5 = "-";
-                }
-            }
-        });
-
-        binding.cbAdministrasiServer.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked == true){
-                    spesifikasi6 = "administrasi server";
-                } else {
-                    spesifikasi6 = "-";
-                }
-            }
-        });
-
-        binding.cbAdministrasiJaringan.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked == true){
-                    spesifikasi7 = "administrasi jaringan";
-                } else {
-                    spesifikasi7 = "-";
-                }
-            }
-        });
-
-        binding.cbDesainer.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked == true){
-                    spesifikasi8 = "desainer";
-                } else {
-                    spesifikasi8 = "-";
-                }
-            }
-        });
-
-        binding.cbFrontend.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked == true){
-                    spesifikasi9 = "frontend";
-                } else {
-                    spesifikasi9 = "-";
-                }
-            }
-        });
-
+        informatikaSetButtonClick();
+        elektronikaSetButtonClick();
 
         binding.btnRekomendasi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getActivity(), RecomendationListActivity.class)
-                        .putExtra("kategori1", namaKategori1)
-                        .putExtra("kategori2", namaKategori2)
-                        .putExtra("kategori3", namaKategori3)
-                        .putExtra("kategori4", namaKategori4)
-                        .putExtra("kategori5", namaKategori5)
-                        .putExtra("spesifikasi1", spesifikasi1)
-                        .putExtra("spesifikasi2", spesifikasi2)
-                        .putExtra("spesifikasi3", spesifikasi3)
-                        .putExtra("spesifikasi4", spesifikasi4)
-                        .putExtra("spesifikasi5", spesifikasi5)
-                        .putExtra("spesifikasi6", spesifikasi6)
-                        .putExtra("spesifikasi7", spesifikasi7)
-                        .putExtra("spesifikasi8", spesifikasi8)
-                        .putExtra("spesifikasi9", spesifikasi9));
+                startActivity(RecomendationListActivity.generateIntent(getActivity(),
+                        spesifikasi.toArray(new String[spesifikasi.size()])));
             }
         });
 
@@ -231,5 +75,181 @@ public class RecomendationFragment extends android.support.v4.app.Fragment {
         return binding.getRoot();
     }
 
+    private void informatikaSetButtonClick() {
+        binding.cbInstalasiJaringan.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    spesifikasi.add("instalasi jaringan");
+                } else {
+                    spesifikasi.remove("instalasi jaringan");
+                }
+            }
+        });
 
+        binding.cbAdministrasiJaringan.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    spesifikasi.add("administrasi jaringan");
+                } else {
+                    spesifikasi.remove("administrasi jaringan");
+                }
+            }
+        });
+
+        binding.cbAnimasi.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    spesifikasi.add("animasi");
+                } else {
+                    spesifikasi.remove("animasi");
+                }
+            }
+        });
+
+        binding.cbDesainGrafis.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    spesifikasi.add("desain grafis");
+                } else {
+                    spesifikasi.remove("desain grafis");
+                }
+            }
+        });
+
+        binding.cbFilm.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    spesifikasi.add("film");
+                } else {
+                    spesifikasi.remove("film");
+                }
+            }
+        });
+
+        binding.cbMobileProgramming.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    spesifikasi.add("mobile programming");
+                    spesifikasi.add("android");
+                    spesifikasi.add("ios");
+                    spesifikasi.add("windows phone");
+                } else {
+                    spesifikasi.remove("mobile programming");
+                    spesifikasi.remove("android");
+                    spesifikasi.remove("ios");
+                    spesifikasi.remove("windows phone");
+                }
+            }
+        });
+
+        binding.cbWebProgramming.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    spesifikasi.add("web programming");
+                } else {
+                    spesifikasi.remove("web programming");
+                }
+            }
+        });
+
+        binding.cbSistemInformasi.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    spesifikasi.add("sistem informasi");
+                } else {
+                    spesifikasi.remove("sistem informasi");
+                }
+            }
+        });
+    }
+
+    private void elektronikaSetButtonClick() {
+        binding.cbInstalasi.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    spesifikasi.add("instalasi");
+                } else {
+                    spesifikasi.remove("instalasi");
+                }
+            }
+        });
+
+        binding.cbTelekomunikasi.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    spesifikasi.add("telekomunikasi");
+                } else {
+                    spesifikasi.remove("telekomunikasi");
+                }
+            }
+        });
+
+        binding.cbAudioVideo.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    spesifikasi.add("audio video");
+                } else {
+                    spesifikasi.remove("audio video");
+                }
+            }
+        });
+
+        binding.cbAnalog.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    spesifikasi.add("analog");
+                } else {
+                    spesifikasi.remove("analog");
+                }
+            }
+        });
+
+        binding.cbTechnicalSupport.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    spesifikasi.add("technical support");
+                } else {
+                    spesifikasi.remove("technical support");
+                }
+            }
+        });
+
+        binding.cbElektronikaIndustri.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    spesifikasi.add("elektronika industri");
+                } else {
+                    spesifikasi.remove("elektronika industri");
+                }
+            }
+        });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        List<ListIndustriForRecommendation> listIndustriForRecommendations = realmDb.getListForRecommendation();
+
+        for (final ListIndustriForRecommendation singleItem : listIndustriForRecommendations) {
+            Log.d("amsibsam", "hapus value "+singleItem.getValue());
+            realmDb.getRealmDb().beginTransaction();
+            singleItem.setValue(0);
+            realmDb.getRealmDb().copyToRealmOrUpdate(singleItem);
+            realmDb.getRealmDb().commitTransaction();
+        }
+    }
 }

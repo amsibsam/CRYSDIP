@@ -22,7 +22,7 @@
                 android:textStyle="bold"
                 android:textSize="@dimen/toolar_title"
                 android:textColor="@android:color/white"
-                android:text="PIREC"/>
+                />
         </RelativeLayout>
 
     </android.support.v7.widget.Toolbar>
