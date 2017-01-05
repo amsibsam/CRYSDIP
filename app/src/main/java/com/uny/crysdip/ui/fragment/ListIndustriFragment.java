@@ -34,6 +34,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import io.realm.RealmList;
+import jp.wasabeef.recyclerview.animators.ScaleInTopAnimator;
 import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator;
 import me.tatarka.bindingcollectionadapter.ItemView;
 import rx.Subscriber;
@@ -75,7 +76,8 @@ public class ListIndustriFragment extends android.support.v4.app.Fragment {
                              Bundle savedInstanceState) {
         binding = FragmentListIndustriBinding.inflate(inflater, container, false);
         setUpRecyclerView();
-
+        binding.setIndustriListViewModel(industriListViewModel);
+        getIndustriList();
         // Inflate the layout for this fragment
         return binding.getRoot();
     }
@@ -83,8 +85,6 @@ public class ListIndustriFragment extends android.support.v4.app.Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        binding.setIndustriListViewModel(industriListViewModel);
-        getIndustriList();
     }
 
     ////////////////INNER CLASS SECTION////////////////////
@@ -102,7 +102,7 @@ public class ListIndustriFragment extends android.support.v4.app.Fragment {
         binding.recyclerView.setLayoutManager(layoutManager);
         binding.recyclerView.setNestedScrollingEnabled(false);
         binding.recyclerView.setHasFixedSize(true);
-        binding.recyclerView.setItemAnimator(new SlideInLeftAnimator());
+        binding.recyclerView.setItemAnimator(new ScaleInTopAnimator());
     }
 
     private void getIndustriList() {

@@ -298,6 +298,7 @@ public class IndustryActivity extends FragmentActivity implements OnMapReadyCall
                         } else {
                             binding.checkboxFavorite.setChecked(false);
                         }
+                        
                         // Add a marker in Sydney and move the camera
                         final LatLng tempat = new LatLng(industriDetail.getLat(), industriDetail.getLng());
                         Log.d("amsibsam", "tempat "+industriDetail.getLat()+", "+industriDetail.getLng());
@@ -305,38 +306,8 @@ public class IndustryActivity extends FragmentActivity implements OnMapReadyCall
                         map.moveCamera(CameraUpdateFactory.newLatLngZoom(tempat, 12f));
 
                         Log.d("amsibsam", "onNext");
-
-                    }
-                });
-
-        crysdipService.getKategori(industriId)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .toList()
-                .subscribe(new Subscriber<List<IndustriKategoriDetail>>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onNext(List<IndustriKategoriDetail> industriKategoriDetails) {
-                        String kategori = "";
-                        Log.d("amsibsam", "size "+industriKategoriDetails.size());
-                        for (int i=0; i<industriKategoriDetails.size();i++){
-                            if (i == industriKategoriDetails.size() - 1){
-                                kategori = kategori+industriKategoriDetails.get(i).getNamaKategori();
-                            } else {
-                                kategori = kategori+industriKategoriDetails.get(i).getNamaKategori() + ", ";
-                            }
-                        }
-                        Log.d("amsibsam", "kategori "+kategori);
-                        binding.tvSkill.setText(kategori);
+                        binding.tvSkill.setText(industriDetail.getSpesifikasi());
+                        binding.tvDeskripsiIndustri.setText(industriDetail.getDeskripsi());
                     }
                 });
     }

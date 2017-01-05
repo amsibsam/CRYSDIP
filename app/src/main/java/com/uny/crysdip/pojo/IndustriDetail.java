@@ -12,8 +12,10 @@ public class IndustriDetail {
     private final int jumlahKaryawan;
     private final String fotoUrl;
     private final boolean isFavorite;
+    private final String spesifikasi;
 
-    public IndustriDetail(String namaIndustri, String deskripsi, String alamat, double lat, double lng, int jumlahKaryawan, String fotoUrl, boolean isFavorite) {
+    public IndustriDetail(String namaIndustri, String deskripsi, String alamat, double lat, double
+            lng, int jumlahKaryawan, String fotoUrl, boolean isFavorite, String spesifikasi) {
         this.namaIndustri = namaIndustri;
         this.deskripsi = deskripsi;
         this.alamat = alamat;
@@ -22,6 +24,7 @@ public class IndustriDetail {
         this.jumlahKaryawan = jumlahKaryawan;
         this.fotoUrl = fotoUrl;
         this.isFavorite = isFavorite;
+        this.spesifikasi = spesifikasi;
     }
 
     public String getNamaIndustri() {
@@ -54,5 +57,9 @@ public class IndustriDetail {
 
     public boolean isFavorite() {
         return isFavorite;
+    }
+
+    public String getSpesifikasi() {
+        return spesifikasi;
     }
 }

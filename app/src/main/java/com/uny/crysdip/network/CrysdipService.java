@@ -449,9 +449,11 @@ public class CrysdipService {
             String lng;
             int jumlahKaryawan;
             String fotoUrl;
+            String spesifikasi;
 
             IndustriDetail toIndustriDetailPojo(boolean favorite){
-                return new IndustriDetail(namaIndustri, deskripsi, alamat, Double.parseDouble(lat), Double.parseDouble(lng), jumlahKaryawan, fotoUrl, favorite);
+                return new IndustriDetail(namaIndustri, deskripsi, alamat, Double.parseDouble(lat),
+                        Double.parseDouble(lng), jumlahKaryawan, fotoUrl, favorite, spesifikasi);
             }
         }
     }
