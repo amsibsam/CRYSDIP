@@ -90,9 +90,12 @@ public class RecomendationListActivity extends AppCompatActivity {
                     }
                 }
             }
+        }
 
+        listIndustriForRecommendations = realmDb.getListForRecommendation();
+        for (final ListIndustriForRecommendation singleItem : listIndustriForRecommendations) {
             if (singleItem.getValue() > 0) {
-                Log.d("amsibsam", "recomended list "+singleItem.getNamaIndustri());
+                Log.d("amsibsam", "recomended list "+singleItem.getNamaIndustri() + " " + singleItem.getValue());
                 recommendedList.add(singleItem);
                 itemRecomendationViewModel.items.add(new RecommendIndustriViewModel(singleItem, new View.OnClickListener() {
                     @Override

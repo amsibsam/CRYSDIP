@@ -136,14 +136,8 @@ public class RecomendationFragment extends android.support.v4.app.Fragment {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     spesifikasi.add("mobile programming");
-                    spesifikasi.add("android");
-                    spesifikasi.add("ios");
-                    spesifikasi.add("windows phone");
                 } else {
                     spesifikasi.remove("mobile programming");
-                    spesifikasi.remove("android");
-                    spesifikasi.remove("ios");
-                    spesifikasi.remove("windows phone");
                 }
             }
         });
