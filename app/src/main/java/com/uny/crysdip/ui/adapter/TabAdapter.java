@@ -3,10 +3,14 @@ package com.uny.crysdip.ui.adapter;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.view.MotionEvent;
 
+import com.uny.crysdip.R;
 import com.uny.crysdip.ui.fragment.FavoritFragment;
 import com.uny.crysdip.ui.fragment.ListIndustriFragment;
 import com.uny.crysdip.ui.fragment.RecomendationFragment;
+
+import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
 
 /**
  * Created by rahardyan on 21/03/16.

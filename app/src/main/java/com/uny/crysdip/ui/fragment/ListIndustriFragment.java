@@ -12,6 +12,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -40,6 +41,7 @@ import me.tatarka.bindingcollectionadapter.ItemView;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
+import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -179,5 +181,4 @@ public class ListIndustriFragment extends android.support.v4.app.Fragment {
 
         return cm.getActiveNetworkInfo() != null;
     }
-
 }

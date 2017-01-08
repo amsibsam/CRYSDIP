@@ -45,38 +45,61 @@ android {
 }
 
 dependencies {
+    testCompile 'junit:junit:4.12'
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+
+    //    dagger for dependencies injection
     apt "com.google.dagger:dagger-compiler:2.0.1"
     compile 'com.google.dagger:dagger:2.0.1'
     compile 'javax.annotation:jsr250-api:1.0'
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    testCompile 'junit:junit:4.12'
+
     compile 'com.android.support:appcompat-v7:23.2.1'
+    compile 'com.android.support:design:23.2.1'
+    compile 'com.google.android.gms:play-services:8.4.0'
+    compile ('com.android.support:support-v4:23.4.0'){
+        force = true;
+    }
+
+    //    gson or parsing json
+    compile 'com.google.code.gson:gson:2.4'
+
+    //    rx programming
     compile 'io.reactivex:rxjava:1.0.14'
     compile 'io.reactivex:rxandroid:1.0.1'
     compile 'com.trello:rxlifecycle:0.3.0'
     compile 'com.trello:rxlifecycle-components:0.3.0'
-    compile 'com.google.code.gson:gson:2.4'
+
+    //     http connection with retrofit and okhttp
     compile 'com.squareup.retrofit:retrofit:2.0.0-beta2'
     compile 'com.squareup.retrofit:converter-gson:2.0.0-beta2'
     compile 'com.squareup.retrofit:adapter-rxjava:2.0.0-beta2'
     compile 'com.squareup.okhttp:okhttp:2.5.0'
     compile 'com.squareup.okhttp:logging-interceptor:2.6.0'
+
+    //     data binding
     compile 'me.tatarka:bindingcollectionadapter:0.14'
     compile 'me.tatarka:bindingcollectionadapter-recyclerview:0.14'
+
+    //    event bus
     compile 'org.greenrobot:eventbus:3.0.0'
-    compile 'com.android.support:support-v4:23.2.1'
+
+    //    app intro
     compile 'com.github.paolorotolo:appintro:3.4.0'
-    compile 'com.google.android.gms:play-services:8.4.0'
-    compile 'com.android.support:design:23.2.1'
+
     //material on pre lollipop
     compile 'com.github.rey5137:material:1.2.1'
+
     //load image from url
     compile 'com.squareup.picasso:picasso:2.5.2'
+
     //recycler animation
     compile 'jp.wasabeef:recyclerview-animators:2.2.3'
-    //realm db
-//    compile 'io.realm:realm-android:0.84.1'
+
+    //    crashlytic
     compile('com.crashlytics.sdk.android:crashlytics:2.5.6@aar') {
         transitive = true;
     }
+
+    //    showcase
+    compile 'uk.co.samuelwall:material-tap-target-prompt:1.7.0'
 }

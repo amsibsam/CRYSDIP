@@ -40,5 +40,11 @@ public class CacheAccountStore {
         return new Mahasiswa(id, nama, alamat, prodi, nim);
     }
 
+    public void firstLogin(boolean firstLogin) {
+        sharedPreferences.edit().putBoolean("first_login", firstLogin).commit();
+    }
 
+    public boolean isFirstLogin() {
+        return sharedPreferences.getBoolean("first_login", true);
+    }
 }

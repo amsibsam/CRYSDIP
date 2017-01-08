@@ -9,6 +9,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 
 import com.google.android.gms.location.places.GeoDataApi;
 import com.uny.crysdip.CrysdipApplication;
@@ -21,6 +22,8 @@ import com.uny.crysdip.ui.adapter.TabAdapter;
 import java.util.Locale;
 
 import javax.inject.Inject;
+
+import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt;
 
 public class HomeActivity extends AppCompatActivity {
     private ActivityHomeBinding binding;
@@ -78,7 +81,9 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-
+        if (cacheAccountStore.isFirstLogin()) {
+            setShowCaseGuide();
+        }
     }
 
     @Override
@@ -86,5 +91,69 @@ public class HomeActivity extends AppCompatActivity {
         super.onResume();
     }
 
+    private void setShowCaseGuide() {
+        final MaterialTapTargetPrompt favorit = new MaterialTapTargetPrompt.Builder(HomeActivity.this)
+                .setTarget(binding.favoriteTarget)
+                .setIcon(R.drawable.ic_tab_favorite)
+                .setPrimaryText("Favorit")
+                .setSecondaryText("Menu yang industri yang telah ditandai sebagai favorit")
+                .setOnHidePromptListener(new MaterialTapTargetPrompt.OnHidePromptListener()
+                {
+                    @Override
+                    public void onHidePrompt(MotionEvent event, boolean tappedTarget)
+                    {
+                        cacheAccountStore.firstLogin(false);
+                    }
+
+                    @Override
+                    public void onHidePromptComplete()
+                    {
+
+                    }
+                }).create();
+
+        final MaterialTapTargetPrompt recomendation = new MaterialTapTargetPrompt.Builder(HomeActivity.this)
+                .setTarget(binding.recommendationTarget)
+                .setIcon(R.drawable.ic_tab_recomendation)
+                .setPrimaryText("Rekomendasi")
+                .setSecondaryText("Menu yang berfungsi unuk memberikan rekomendasi berdasarkan minat")
+                .setOnHidePromptListener(new MaterialTapTargetPrompt.OnHidePromptListener()
+                {
+                    @Override
+                    public void onHidePrompt(MotionEvent event, boolean tappedTarget)
+                    {
+                        favorit.show();
+                    }
+
+                    @Override
+                    public void onHidePromptComplete()
+                    {
+
+                    }
+                }).create();
+
+
+        MaterialTapTargetPrompt home = new MaterialTapTargetPrompt.Builder(HomeActivity.this)
+                .setTarget(binding.homeTarget)
+                .setIcon(R.drawable.ic_tab_home)
+                .setPrimaryText("Beranda")
+                .setSecondaryText("Menu yang berisi semua daftar industri")
+                .setOnHidePromptListener(new MaterialTapTargetPrompt.OnHidePromptListener()
+                {
+                    @Override
+                    public void onHidePrompt(MotionEvent event, boolean tappedTarget)
+                    {
+                        recomendation.show();
+                    }
+
+                    @Override
+                    public void onHidePromptComplete()
+                    {
+
+                    }
+                }).create();
+
+        home.show();
+    }
 
 }

@@ -11,6 +11,7 @@
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="#212121"
         android:fitsSystemWindows="true">
 
         <android.support.design.widget.AppBarLayout
@@ -98,6 +99,7 @@
                 <android.support.v7.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    app:cardBackgroundColor="#5a5386"
                     android:background="@color/white">
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -119,6 +121,7 @@
                                 android:id="@+id/tv_alamat_industri"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:textColor="@color/white"
                                 android:text="Jl. Petung No.24, Sleman, D.I Yogyakarta"/>
                         </LinearLayout>
                         <LinearLayout
@@ -136,6 +139,7 @@
                                 android:id="@+id/tv_skill"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:textColor="@color/white"
                                 android:text="Backend, Frontend, Tester, Android, iOS, Desainer"/>
                         </LinearLayout>
                     </LinearLayout>
@@ -145,6 +149,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
+                    app:cardBackgroundColor="#4873a6"
                     android:background="@color/white">
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -155,9 +160,11 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textStyle="bold"
+                            android:textColor="@color/white"
                             android:textSize="18sp"
                             android:text="Deskripsi"/>
                         <TextView
+                            android:textColor="@color/white"
                             android:layout_marginLeft="8dp"
                             android:layout_marginTop="8dp"
                             android:id="@+id/tv_deskripsi_industri"
@@ -172,6 +179,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
+                    app:cardBackgroundColor="#4fa3d1"
                     android:background="@color/white">
                     <RelativeLayout
                         android:layout_width="match_parent"
@@ -190,7 +198,6 @@
                             android:layout_height="30dp"
                             android:progressDrawable="@drawable/progress_bar_color"/>
                         <com.uny.crysdip.ui.util.ExpandedListView
-                            android:background="@color/white"
                             android:clickable="false"
                             android:focusable="false"
                             android:visibility="gone"
@@ -205,6 +212,7 @@
                         <TextView
                             android:layout_below="@+id/list_view"
                             android:id="@+id/btn_see_more"
+                            android:textColor="@color/white"
                             android:layout_alignParentRight="true"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -227,7 +235,9 @@
                         android:id="@+id/et_testimoni"
                         android:layout_weight="4"
                         android:layout_width="0dp"
+                        android:textColorHint="@color/white"
                         android:layout_height="wrap_content"
+                        android:textColor="@color/white"
                         android:hint="@string/tulis_testimoni"/>
                     <Button
                         android:id="@+id/btn_send_testimoni"

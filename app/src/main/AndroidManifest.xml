@@ -52,7 +52,8 @@
             android:name="io.fabric.ApiKey"
             android:value="3ffb03f6f2cd6672ae7619c546748dd2ccb4f862" />
 
-        <activity android:name=".ui.activity.ChooseProdiActivity"></activity>
+        <activity android:name=".ui.activity.ChooseProdiActivity" />
+        <activity android:name=".ui.activity.IntroAhoy"></activity>
     </application>
 
 </manifest>
