@@ -166,17 +166,6 @@ public class RecomendationFragment extends android.support.v4.app.Fragment {
     }
 
     private void elektronikaSetButtonClick() {
-        binding.cbInstalasi.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    spesifikasi.add("instalasi");
-                } else {
-                    spesifikasi.remove("instalasi");
-                }
-            }
-        });
-
         binding.cbTelekomunikasi.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {

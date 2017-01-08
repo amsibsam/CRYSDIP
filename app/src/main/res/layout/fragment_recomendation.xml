@@ -150,12 +150,6 @@
                             android:layout_height="wrap_content"
                             android:orientation="vertical">
                             <CheckBox
-                                android:id="@+id/cb_instalasi"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Instalasi" />
-
-                            <CheckBox
                                 android:id="@+id/cb_telekomunikasi"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
