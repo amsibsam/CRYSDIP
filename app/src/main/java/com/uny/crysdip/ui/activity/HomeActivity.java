@@ -16,7 +16,9 @@ import com.uny.crysdip.CrysdipApplication;
 import com.uny.crysdip.R;
 import com.uny.crysdip.cache.CacheAccountStore;
 import com.uny.crysdip.databinding.ActivityHomeBinding;
+import com.uny.crysdip.db.RealmDb;
 import com.uny.crysdip.network.CrysdipService;
+import com.uny.crysdip.pojo.Spesifikasi;
 import com.uny.crysdip.ui.adapter.TabAdapter;
 
 import java.util.Locale;
@@ -35,6 +37,9 @@ public class HomeActivity extends AppCompatActivity {
 
     @Inject
     CacheAccountStore cacheAccountStore;
+
+    @Inject
+    RealmDb realmDb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +63,7 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 viewPager.setCurrentItem(tab.getPosition());
-                switch (tab.getPosition()){
+                switch (tab.getPosition()) {
                     case 0:
                         binding.toolbarTitle.setText("Beranda");
                         break;
@@ -89,6 +94,13 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        for (final Spesifikasi spesifikasi : realmDb.getListSpesifikasi()) {
+            realmDb.getRealmDb().beginTransaction();
+            spesifikasi.setDf(0);
+            spesifikasi.setIdf(0);
+            realmDb.getRealmDb().copyToRealmOrUpdate(spesifikasi);
+            realmDb.getRealmDb().commitTransaction();
+        }
     }
 
     private void setShowCaseGuide() {
@@ -97,17 +109,14 @@ public class HomeActivity extends AppCompatActivity {
                 .setIcon(R.drawable.ic_tab_favorite)
                 .setPrimaryText("Favorit")
                 .setSecondaryText("Menu yang industri yang telah ditandai sebagai favorit")
-                .setOnHidePromptListener(new MaterialTapTargetPrompt.OnHidePromptListener()
-                {
+                .setOnHidePromptListener(new MaterialTapTargetPrompt.OnHidePromptListener() {
                     @Override
-                    public void onHidePrompt(MotionEvent event, boolean tappedTarget)
-                    {
+                    public void onHidePrompt(MotionEvent event, boolean tappedTarget) {
                         cacheAccountStore.firstLogin(false);
                     }
 
                     @Override
-                    public void onHidePromptComplete()
-                    {
+                    public void onHidePromptComplete() {
 
                     }
                 }).create();
@@ -117,17 +126,14 @@ public class HomeActivity extends AppCompatActivity {
                 .setIcon(R.drawable.ic_tab_recomendation)
                 .setPrimaryText("Rekomendasi")
                 .setSecondaryText("Menu yang berfungsi unuk memberikan rekomendasi berdasarkan minat")
-                .setOnHidePromptListener(new MaterialTapTargetPrompt.OnHidePromptListener()
-                {
+                .setOnHidePromptListener(new MaterialTapTargetPrompt.OnHidePromptListener() {
                     @Override
-                    public void onHidePrompt(MotionEvent event, boolean tappedTarget)
-                    {
+                    public void onHidePrompt(MotionEvent event, boolean tappedTarget) {
                         favorit.show();
                     }
 
                     @Override
-                    public void onHidePromptComplete()
-                    {
+                    public void onHidePromptComplete() {
 
                     }
                 }).create();
@@ -138,17 +144,14 @@ public class HomeActivity extends AppCompatActivity {
                 .setIcon(R.drawable.ic_tab_home)
                 .setPrimaryText("Beranda")
                 .setSecondaryText("Menu yang berisi semua daftar industri")
-                .setOnHidePromptListener(new MaterialTapTargetPrompt.OnHidePromptListener()
-                {
+                .setOnHidePromptListener(new MaterialTapTargetPrompt.OnHidePromptListener() {
                     @Override
-                    public void onHidePrompt(MotionEvent event, boolean tappedTarget)
-                    {
+                    public void onHidePrompt(MotionEvent event, boolean tappedTarget) {
                         recomendation.show();
                     }
 
                     @Override
-                    public void onHidePromptComplete()
-                    {
+                    public void onHidePromptComplete() {
 
                     }
                 }).create();

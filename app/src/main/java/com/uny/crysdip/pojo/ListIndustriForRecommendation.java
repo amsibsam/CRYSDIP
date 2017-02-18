@@ -15,7 +15,7 @@ public class ListIndustriForRecommendation extends RealmObject{
     private String fotoUrl;
     private int count;
     private RealmList<Spesifikasi> spesifikasis;
-    private int value;
+    private double value;
 
 
     public ListIndustriForRecommendation() {
@@ -79,11 +79,11 @@ public class ListIndustriForRecommendation extends RealmObject{
         this.spesifikasis = spesifikasis;
     }
 
-    public void setValue(int value) {
+    public void setValue(double value) {
         this.value = value;
     }
 
-    public int getValue() {
+    public double getValue() {
         return value;
     }
 }

@@ -4,6 +4,7 @@ import com.google.android.gms.drive.query.SortOrder;
 import com.uny.crysdip.CrysdipApplication;
 import com.uny.crysdip.pojo.ListIndustri;
 import com.uny.crysdip.pojo.ListIndustriForRecommendation;
+import com.uny.crysdip.pojo.Spesifikasi;
 
 import java.util.List;
 
@@ -49,7 +50,15 @@ public class RealmDb {
         return listIndustris;
     }
 
-
+    public List<Spesifikasi> getListSpesifikasi(){
+        RealmResults<Spesifikasi> spesifikasis = null;
+        try{
+            spesifikasis = realmDb.where(Spesifikasi.class).findAll();
+        } catch (RealmException e){
+            e.printStackTrace();
+        }
+        return spesifikasis;
+    }
 
     public List<ListIndustriForRecommendation> getListForRecommendation() {
         RealmResults<ListIndustriForRecommendation> listIndustriForRecommendations = null;

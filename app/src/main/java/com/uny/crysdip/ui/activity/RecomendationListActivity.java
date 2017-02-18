@@ -1,5 +1,6 @@
 package com.uny.crysdip.ui.activity;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
@@ -74,17 +75,60 @@ public class RecomendationListActivity extends AppCompatActivity {
 
     private void getRecommendationFromDB() {
         List<ListIndustriForRecommendation> listIndustriForRecommendations = realmDb.getListForRecommendation();
+        ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Mencari Rekomendasi..");
+        progressDialog.show();
+//        tentukan nilai DF tiap spesifikasi
+        for (final ListIndustriForRecommendation singleItem : listIndustriForRecommendations) {
+            Log.d("amsibsam", "all industri " + singleItem.getNamaIndustri() + " " + singleItem.getValue());
+            for (Spesifikasi spesifikasiIndustri : singleItem.getSpesifikasis()) {
+                String spesifikasiIndustriString = spesifikasiIndustri.getSpec();
+                Log.d("rekomendasi321", "spesifikasi industri :" + spesifikasiIndustriString);
+                for (String spesifikasiUser : spesifikasi) {
+                    Log.d("rekomendasi321", "spesifikasi user :" + spesifikasiUser);
+                    if (spesifikasiUser.toLowerCase().equals(spesifikasiIndustriString.toLowerCase())) {
+                        Log.d("rekomendasi321", "industri yang masuk " + singleItem.getNamaIndustri());
+                        realmDb.getRealmDb().beginTransaction();
+                        spesifikasiIndustri.setDf(spesifikasiIndustri.getDf() + 1);
+                        realmDb.getRealmDb().copyToRealmOrUpdate(spesifikasiIndustri);
+                        realmDb.getRealmDb().commitTransaction();
+                    }
+                }
+            }
+        }
+
+//        tentukan nilai IDF tiap spesifikasi
+        for (final Spesifikasi spesifikasi : realmDb.getListSpesifikasi()) {
+            Log.d("rekomendasi321", "calculated spec df:" + spesifikasi.getSpec() + " df "+spesifikasi.getDf());
+            if (spesifikasi.getDf() > 0) {
+                realmDb.getRealmDb().beginTransaction();
+                spesifikasi.setIdf(Math.log(listIndustriForRecommendations.size()/spesifikasi.getDf()));
+                realmDb.getRealmDb().copyToRealmOrUpdate(spesifikasi);
+                realmDb.getRealmDb().commitTransaction();
+            }
+        }
+
+//        tentukan nilai tf.idf (idf menggunakan perhitungan binary 0/1)
+        for (final Spesifikasi spesifikasi : realmDb.getListSpesifikasi()) {
+            if (spesifikasi.getDf() > 0) {
+                realmDb.getRealmDb().beginTransaction();
+                spesifikasi.setValue(1*spesifikasi.getIdf());
+                realmDb.getRealmDb().copyToRealmOrUpdate(spesifikasi);
+                realmDb.getRealmDb().commitTransaction();
+            }
+        }
 
         for (final ListIndustriForRecommendation singleItem : listIndustriForRecommendations) {
             Log.d("amsibsam", "all industri " + singleItem.getNamaIndustri() + " " + singleItem.getValue());
-            for (String spesifikasiUser : spesifikasi) {
-                Log.d("amsibsam", "spesifikasi user :"+spesifikasiUser);
-                for (Spesifikasi spesifikasiIndustri : singleItem.getSpesifikasis()) {
-                    String spesifikasiIndustriString = spesifikasiIndustri.getSpec();
-                    if (spesifikasiUser.toLowerCase().equals(spesifikasiIndustriString.toLowerCase())) {
-                        Log.d("amsibsam", "industri yang masuk "+singleItem.getNamaIndustri());
+            for (Spesifikasi spesifikasiIndustri : singleItem.getSpesifikasis()) {
+                String spesifikasiIndustriString = spesifikasiIndustri.getSpec();
+                Log.d("rekomendasi321", "spesifikasi industri :" + spesifikasiIndustriString);
+                for (Spesifikasi weigthedSpesifikasi : realmDb.getListSpesifikasi()) {
+                    Log.d("rekomendasi321", "weighted spesifikasi :" + weigthedSpesifikasi.getSpec());
+                    if (weigthedSpesifikasi.getSpec().toLowerCase().equals(spesifikasiIndustriString.toLowerCase()) && weigthedSpesifikasi.getDf() > 0) {
+                        Log.d("rekomendasi321", "industri yang masuk " + singleItem.getNamaIndustri());
                         realmDb.getRealmDb().beginTransaction();
-                        singleItem.setValue(singleItem.getValue() + 1);
+                        singleItem.setValue(singleItem.getValue() + weigthedSpesifikasi.getValue());
                         realmDb.getRealmDb().copyToRealmOrUpdate(singleItem);
                         realmDb.getRealmDb().commitTransaction();
                     }
@@ -94,8 +138,8 @@ public class RecomendationListActivity extends AppCompatActivity {
 
         listIndustriForRecommendations = realmDb.getListForRecommendation();
         for (final ListIndustriForRecommendation singleItem : listIndustriForRecommendations) {
-            if (singleItem.getValue() > 0) {
-                Log.d("amsibsam", "recomended list "+singleItem.getNamaIndustri() + " " + singleItem.getValue());
+            if (singleItem.getValue() != 0) {
+                Log.d("amsibsam", "recomended list " + singleItem.getNamaIndustri() + " " + singleItem.getValue());
                 recommendedList.add(singleItem);
                 itemRecomendationViewModel.items.add(new RecommendIndustriViewModel(singleItem, new View.OnClickListener() {
                     @Override
