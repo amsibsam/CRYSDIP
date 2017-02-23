@@ -159,7 +159,7 @@
                                 android:id="@+id/cb_audio_video"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Adio Video" />
+                                android:text="Audio Video" />
 
                         </LinearLayout>
 
