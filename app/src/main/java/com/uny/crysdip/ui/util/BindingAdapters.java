@@ -13,7 +13,6 @@ public class BindingAdapters {
         Picasso.with(imageView.getContext())
                 .load(imageUri)
                 .fit()
-                .centerCrop()
                 .into(imageView);
     }
 

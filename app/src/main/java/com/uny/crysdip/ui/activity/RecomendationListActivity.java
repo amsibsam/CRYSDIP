@@ -1,6 +1,5 @@
 package com.uny.crysdip.ui.activity;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
@@ -8,7 +7,6 @@ import android.databinding.ObservableArrayList;
 import android.databinding.ObservableList;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.view.menu.SubMenuBuilder;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 import android.view.View;
@@ -75,9 +73,7 @@ public class RecomendationListActivity extends AppCompatActivity {
 
     private void getRecommendationFromDB() {
         List<ListIndustriForRecommendation> listIndustriForRecommendations = realmDb.getListForRecommendation();
-        ProgressDialog progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Mencari Rekomendasi..");
-        progressDialog.show();
+
 //        tentukan nilai DF tiap spesifikasi
         for (final ListIndustriForRecommendation singleItem : listIndustriForRecommendations) {
             Log.d("amsibsam", "all industri " + singleItem.getNamaIndustri() + " " + singleItem.getValue());
