@@ -3,6 +3,7 @@ package com.uny.crysdip.ui.activity;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.location.Geocoder;
+import android.os.Handler;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -10,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.widget.Toast;
 
 import com.google.android.gms.location.places.GeoDataApi;
 import com.uny.crysdip.CrysdipApplication;
@@ -40,6 +42,7 @@ public class HomeActivity extends AppCompatActivity {
 
     @Inject
     RealmDb realmDb;
+    private boolean doubleBackToExitPressedOnce = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -159,4 +162,25 @@ public class HomeActivity extends AppCompatActivity {
         home.show();
     }
 
+    @Override
+    public void onBackPressed() {
+        doubleTapToExit();
+    }
+
+    private void doubleTapToExit() {
+        if (doubleBackToExitPressedOnce) {
+            super.onBackPressed();
+            return;
+        }
+
+        this.doubleBackToExitPressedOnce = true;
+        Toast.makeText(this, getString(R.string.pesan_exit), Toast.LENGTH_SHORT).show();
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                doubleBackToExitPressedOnce=false;
+            }
+        }, 2000);
+    }
 }
