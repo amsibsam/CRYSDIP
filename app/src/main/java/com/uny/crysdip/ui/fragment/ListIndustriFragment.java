@@ -79,7 +79,7 @@ public class ListIndustriFragment extends android.support.v4.app.Fragment {
         binding = FragmentListIndustriBinding.inflate(inflater, container, false);
         setUpRecyclerView();
         binding.setIndustriListViewModel(industriListViewModel);
-        getIndustriList();
+
         // Inflate the layout for this fragment
         return binding.getRoot();
     }
@@ -87,6 +87,7 @@ public class ListIndustriFragment extends android.support.v4.app.Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        getIndustriList();
     }
 
     ////////////////INNER CLASS SECTION////////////////////
